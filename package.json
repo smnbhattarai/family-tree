@@ -17,6 +17,7 @@
         "vite": "^6.2.2"
     },
     "dependencies": {
+        "bootstrap": "^5.3.8",
         "playwright": "^1.55.0"
     }
 }
