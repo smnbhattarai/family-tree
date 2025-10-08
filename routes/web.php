@@ -11,6 +11,7 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('sign-in', [AuthController::class, 'loginPage'])->name('page.sign.in');
 
 Route::get('login/{email}', [AuthController::class, 'processLogin'])->middleware('signed')->name('login:store');
+Route::redirect('login', 'sign-in');
 Route::post('login', [AuthController::class, 'login'])->name('login');
 
 // Authorized and verified user only

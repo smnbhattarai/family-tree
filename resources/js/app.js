@@ -1,6 +1,8 @@
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle.js";
+import * as f3 from "family-chart";
 
 window.bootstrap = bootstrap;
+window.f3 = f3;
 
 // Bootstrap tooltips
 var tooltipTriggerList = [].slice.call(

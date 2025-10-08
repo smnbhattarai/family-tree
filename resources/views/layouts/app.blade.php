@@ -21,7 +21,7 @@
 
 <!--Main layout-->
 <main class="mt-4">
-    <div class="container">
+    <div class="container-fluid">
 
         @if(session('success') || session('error') || session('info'))
             <section>
