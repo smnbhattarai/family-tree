@@ -41,5 +41,12 @@
 
 @yield('footerScript')
 
+@auth
+    <form action="{{ route('logout') }}" method="post" id="logout-form" style="display: none;">
+        @csrf
+        <button type="submit" class="btn btn-link text-light">Logout</button>
+    </form>
+@endauth
+
 </body>
 </html>
