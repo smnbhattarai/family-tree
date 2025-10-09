@@ -1,5 +1,6 @@
 @import "bootstrap/dist/css/bootstrap.css";
 @import "./family-chart.css";
+@import "bootstrap-icons";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -16,4 +17,18 @@
 
 #FamilyChart path.link {
     stroke: #000;
+}
+
+button.btn-male {
+    background-color: #0d6dfd;
+    color: white;
+}
+
+button.btn-female {
+    background-color: #ee3e80;
+    color: white;
+}
+
+legend {
+    font-size: 1.1rem;
 }

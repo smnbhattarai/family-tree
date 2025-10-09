@@ -18,16 +18,24 @@
                 @auth
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('page.family') ? 'active' : '' }}"
-                           href="{{ route('page.family') }}">{{ __('Family') }}</a>
+                           href="{{ route('page.family') }}">{{ __('Explore Family') }}</a>
                     </li>
                 @endauth
             </ul>
 
             <ul class="navbar-nav d-flex flex-row">
                 @auth
+                    @if(auth()->user()->isAdmin())
+                        <li class="nav-item me-3 me-lg-0">
+                            <a class="nav-link {{ request()->routeIs('admin.family.create') ? 'active' : '' }}" href="{{ route('admin.family.create') }}">{{ __('Add Family') }}</a>
+                        </li>
+                        <li class="nav-item me-3 me-lg-0">
+                            <a class="nav-link {{ request()->routeIs('admin.family.index') ? 'active' : '' }}" href="{{ route('admin.family.index') }}">{{ __('Family List') }}</a>
+                        </li>
+                    @endif
                     <li class="nav-item me-3 me-lg-0">
                         <a class="nav-link" href="javascript:void(0)"
-                           onclick="document.getElementById('logout-form').submit()">Logout</a>
+                           onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>
                     </li>
                 @endauth
                 @guest
