@@ -8,7 +8,7 @@
         <div class="col-md-12"></div>
 
         <div class="col-md-12">
-            <table class="table table-hover table-bordered border-secondary-subtle">
+            <table class="table table-hover table-sm" id="familyTable">
                 <thead>
                 <tr>
                     <th scope="col">{{ __('S.No.') }}</th>
@@ -19,7 +19,6 @@
                     <th scope="col">{{ __('Father') }}</th>
                     <th scope="col">{{ __('Mother') }}</th>
                     <th scope="col">{{ __('Spouse') }}</th>
-                    <th scope="col">{{ __('Gender') }}</th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
@@ -29,9 +28,14 @@
                         <td>{{ $family->id }}</td>
                         <td>
                             @if($family->avatar)
-                                <img src="{{ $family->avatar }}" alt="Avatar" width="30" height="30"> &nbsp;&nbsp;
+                                <img src="{{ asset($family->thumbnailPath()) }}" alt="Avatar" width="30" height="30"> &nbsp;&nbsp;
                             @endif
                             {{ $family->name() }}
+                                @if($family->gender == 'M')
+                                    <sup class="btn-male"><i class="bi bi-gender-male"></i></sup>
+                                @else
+                                    <sup class="btn-female"><i class="bi bi-gender-female"></i></sup>
+                                @endif
                         </td>
                         <td>{{ $family->email }}</td>
                         <td>{{ $family->phone }}</td>
@@ -39,13 +43,6 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>
-                            @if($family->gender == 'M')
-                            <button class="btn btn-male btn-sm"><i class="bi bi-gender-male"></i></button>
-                            @else
-                            <button class="btn btn-female btn-sm"><i class="bi bi-gender-female"></i></button>
-                                @endif
-                        </td>
                         <td>
                             <a class="btn btn-primary btn-sm" href="{{ route('admin.family.show', $family->id) }}" role="button"><i class="bi bi-eye-fill"></i></a>
                             <a class="btn btn-info btn-sm" href="{{ route('admin.family.edit', $family->id) }}" role="button"><i class="bi bi-pencil-fill"></i></a>
@@ -56,9 +53,23 @@
                 </tbody>
             </table>
 
-            {{ $families->links() }}
-
         </div>
     </div>
 
+@endsection
+
+@section('style')
+    <link rel="stylesheet" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.css">
+@endsection
+
+@section('footerScript')
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            new DataTable('#familyTable');
+        });
+    </script>
 @endsection

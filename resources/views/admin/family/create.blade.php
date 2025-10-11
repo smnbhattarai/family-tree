@@ -8,9 +8,9 @@
         <div class="col-md-3"></div>
 
         <div class="col-md-6">
-            <h3 class="text-center mb-3">{{ __('Add Family') }}</h3>
+            <h4 class="text-center mb-3">{{ __('Add Family') }}</h4>
 
-            <form action="{{ route('admin.family.store') }}" method="POST">
+            <form action="{{ route('admin.family.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <fieldset class="border rounded-3 p-3 mb-3">
@@ -59,10 +59,14 @@
                             ])
                         </div>
                         <div class="col text-center">
-                            <img class="text-right" src="https://picsum.photos/90" alt="Avatar" width="70" height="70">
+                            <img class="text-right" src="" alt="Avatar" width="70" height="70">
                         </div>
                         <div class="col">
-                            @include('partials.form.file_input', [])
+                            @include('partials.form.file_input', [
+                                'name' => 'avatar',
+                                'label' => __('Avatar'),
+                                'accept' => 'image/*',
+                            ])
                         </div>
                     </div>
                 </fieldset>
@@ -101,16 +105,44 @@
                     <legend class="float-none w-auto px-3">{{ __('Family Detail') }}</legend>
                     <div class="row">
                         <div class="col">
-                            Father
+                            @include('partials.form.select_input', [
+                                'label' => __('Father'),
+                                'name' => 'father_id',
+                                'options' => [
+                                    '1' => 'A',
+                                    '2' => 'B',
+                                    '3' => 'C',
+                                    '4' => 'D',
+                                ]
+                            ])
                         </div>
                         <div class="col">
-                            Mother
+                            @include('partials.form.select_input', [
+                                'label' => __('Mother'),
+                                'name' => 'mother_id',
+                                'options' => [
+                                    '9' => 'W',
+                                    '8' => 'X',
+                                    '7' => 'Y',
+                                    '6' => 'Z',
+                                ]
+                            ])
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col">
-                            Spouse
+                            @include('partials.form.select_input', [
+                                'label' => __('Spouse'),
+                                'name' => 'spouse',
+                                'options' => [
+                                    '11' => 'L',
+                                    '12' => 'M',
+                                    '13' => 'O',
+                                    '14' => 'P',
+                                ],
+                                'multiple' => true,
+                            ])
                         </div>
                         <div class="col">
 

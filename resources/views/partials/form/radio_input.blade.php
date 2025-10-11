@@ -7,8 +7,10 @@
                     class="form-check-input @error($name) is-invalid @enderror"
                     type="radio"
                     name="{{ $name }}"
-                    id="{{$id ?? ($name ?? '') }}{{ $value }}" value="{{ $value }}"
+                    id="{{$id ?? ($name ?? '') }}{{ $value }}"
+                    value="{{ $value }}"
                     {{ isset($required) ? ($required ? 'required' : '') : '' }}
+                    @checked($value == old($name))
                 >
                 <label class="form-check-label" for="{{$id ?? ($name ?? '') }}{{ $value }}">{{ $display }}</label>
             </div>

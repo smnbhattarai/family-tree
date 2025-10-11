@@ -29,6 +29,6 @@ final class UserSeeder extends Seeder
             'role' => 'user',
         ]);
 
-        User::factory(8)->create();
+        // User::factory(8)->create();
     }
 }

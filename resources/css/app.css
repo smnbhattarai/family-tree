@@ -1,6 +1,7 @@
 @import "bootstrap/dist/css/bootstrap.css";
 @import "./family-chart.css";
 @import "bootstrap-icons";
+@import "tom-select/dist/css/tom-select.bootstrap5.css";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -19,14 +20,12 @@
     stroke: #000;
 }
 
-button.btn-male {
-    background-color: #0d6dfd;
-    color: white;
+.btn-male {
+    color: #0d6dfd;
 }
 
-button.btn-female {
-    background-color: #ee3e80;
-    color: white;
+.btn-female {
+    color: #ee3e80;
 }
 
 legend {

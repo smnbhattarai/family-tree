@@ -14,6 +14,6 @@ final class FamilySeeder extends Seeder
      */
     public function run(): void
     {
-        Family::factory(10)->create();
+        Family::factory(2)->create();
     }
 }

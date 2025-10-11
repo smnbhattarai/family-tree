@@ -20,4 +20,18 @@ final class Family extends Model
     {
         return "$this->first_name $this->middle_name $this->last_name";
     }
+
+    public function thumbnailPath(): string
+    {
+        if (! $this->avatar) {
+            return '';
+        }
+
+        $originalFile = $this->avatar;
+        $exploded = explode('/', $originalFile);
+        $filename = end($exploded);
+        $thumbFilename = "thumb-$filename";
+
+        return $exploded[0].'/thumbnail/'.$thumbFilename;
+    }
 }

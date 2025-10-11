@@ -5,7 +5,7 @@
         class="form-control @error($name) is-invalid @enderror"
         name="{{ $name ?? '' }}"
         id="{{$id ?? ($name ?? '') }}"
-        value="{{ $value ?? '' }}"
+        value="{{ $value ?? old($name) }}"
         placeholder="{{ $label ?? '' }}"
         {{ isset($required) ? ($required ? 'required' : '') : '' }}
         {{ isset($disabled) ? ($disabled ? 'disabled' : '') : '' }}
@@ -22,5 +22,5 @@
     @error($name)
     <div class="invalid-feedback">{{ $errors->first($name) }}</div>
     @enderror
-</div>
 
+</div>
