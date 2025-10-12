@@ -45,26 +45,48 @@
                         </tr>
                         <tr>
                             <th scope="row">{{ __('Father') }}</th>
-                            <td>{{ $family->father_id }}</td>
+                            <td>
+                                @if($family->father)
+                                <a href="{{ route('admin.family.show', $family->father->id) }}">{{ $family->father->name() }}</a>
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">{{ __('Mother') }}</th>
-                            <td>{{ $family->mother_id }}</td>
+                            <td>
+                                @if($family->mother)
+                                <a href="{{ route('admin.family.show', $family->mother->id) }}">{{ $family->mother->name() }}</a>
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">{{ __('Spouse') }}</th>
-                            <td>{{ $family->spouse }}</td>
+                            <td>
+                                @if($family->spouses())
+                                @foreach($family->spouses() as $spouse)
+                                    <a href="{{ route('admin.family.show', $spouse->id) }}">{{ $spouse->name() }}</a><br>
+                                @endforeach
+                                @endif
+                            </td>
                         </tr>
                         </tbody>
                     </table>
+
+                    <p class="my-5">
+                        <a class="btn btn-info btn-sm" href="{{ route('admin.family.index') }}">{{ __('Back') }}</a>
+                        <a class="btn btn-primary btn-sm" href="{{ route('admin.family.edit', $family) }}">{{ __('Edit') }}</a>
+                    </p>
+
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
+            @if($family->avatar)
             <div class="card">
                 <img src="{{ asset($family->avatar) }}" class="card-img-top" alt="{{ $family->first_name }}">
             </div>
+            @endif
         </div>
 
     </div>

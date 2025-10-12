@@ -46,7 +46,16 @@
                         <td>
                             <a class="btn btn-primary btn-sm" href="{{ route('admin.family.show', $family->id) }}" role="button"><i class="bi bi-eye-fill"></i></a>
                             <a class="btn btn-info btn-sm" href="{{ route('admin.family.edit', $family->id) }}" role="button"><i class="bi bi-pencil-fill"></i></a>
-                            <a class="btn btn-danger btn-sm" href="#" role="button"><i class="bi bi-trash-fill"></i></a>
+                            <form
+                                action="{{ route('admin.family.destroy', $family->id) }}"
+                                method="POST"
+                                style="display: inline-block;"
+                                onsubmit="confirm('Are you sure you want to delete this record?')"
+                            >
+                                @method('DELETE')
+                                @csrf
+                                <button class="btn btn-danger btn-sm" type="submit"><i class="bi bi-trash-fill"></i></button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

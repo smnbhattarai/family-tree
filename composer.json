@@ -12,6 +12,7 @@
         "php": "^8.4.0",
         "intervention/image-laravel": "^1.5",
         "laravel/framework": "^12.29.0",
+        "laravel/tinker": "^2.10",
         "nunomaduro/essentials": "^1.0.0"
     },
     "require-dev": {

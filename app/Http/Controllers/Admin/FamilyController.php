@@ -28,7 +28,26 @@ final class FamilyController
      */
     public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
-        return view('admin.family.create');
+        $fathers = Family::query()->where('gender', 'M')->get(['id', 'first_name', 'middle_name', 'last_name']);
+        $mothers = Family::query()->where('gender', 'F')->get(['id', 'first_name', 'middle_name', 'last_name']);
+        $spouse = Family::query()->get(['id', 'first_name', 'middle_name', 'last_name']);
+
+        $f = [];
+        foreach ($fathers as $father) {
+            $f[$father->id] = $father->name();
+        }
+
+        $m = [];
+        foreach ($mothers as $mother) {
+            $m[$mother->id] = $mother->name();
+        }
+
+        $s = [];
+        foreach ($spouse as $item) {
+            $s[$item->id] = $item->name();
+        }
+
+        return view('admin.family.create', ['fathers' => $f, 'mothers' => $m, 'spouse' => $s]);
     }
 
     /**
@@ -73,24 +92,78 @@ final class FamilyController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(): void
+    public function edit(Family $family): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
-        //
+        $fathers = Family::query()->where('gender', 'M')->get(['id', 'first_name', 'middle_name', 'last_name']);
+        $mothers = Family::query()->where('gender', 'F')->get(['id', 'first_name', 'middle_name', 'last_name']);
+        $spouse = Family::query()->get(['id', 'first_name', 'middle_name', 'last_name']);
+
+        $f = [];
+        foreach ($fathers as $father) {
+            $f[$father->id] = $father->name();
+        }
+
+        $m = [];
+        foreach ($mothers as $mother) {
+            $m[$mother->id] = $mother->name();
+        }
+
+        $s = [];
+        foreach ($spouse as $item) {
+            $s[$item->id] = $item->name();
+        }
+
+        return view('admin.family.edit', ['family' => $family, 'fathers' => $f, 'mothers' => $m, 'spouse' => $s]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(): void
+    public function update(Family $family, FamilyRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+
+            // process original image
+            $filename = Str::slug((string) $data['first_name']).'-'.Str::random(8);
+            $thumbImage = Image::read($file)->scaleDown(150, 150);
+
+            $file->move(public_path('avatar'), $filename.'.'.$file->getClientOriginalExtension());
+            $data['avatar'] = 'avatar/'.$filename.'.'.$file->getClientOriginalExtension();
+
+            // process thumbnail
+            $thumbFilename = 'thumb-'.$filename.'.'.$file->getClientOriginalExtension();
+            Storage::disk('public_avatar')->put("thumbnail/$thumbFilename", $thumbImage->encodeByExtension($file->getClientOriginalExtension(), quality: 70));
+
+            // Delete old avatar file
+            $this->deleteAvatar($family);
+        }
+
+        if ($request->filled('spouse')) {
+            $data['spouse'] = json_encode($request->input('spouse'));
+        }
+
+        $family->update($data);
+
+        return redirect()->route('admin.family.show', $family->id)->with('success', 'Member updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(): void
+    public function destroy(Family $family)
     {
-        //
+        $this->deleteAvatar($family);
+        $family->delete();
+
+        return redirect()->route('admin.family.index');
+    }
+
+    private function deleteAvatar(Family $family): void
+    {
+        Storage::disk('public_avatar')->delete($family->avatarFilename());
+        Storage::disk('public_avatar')->delete($family->avatarThumbnailFilename());
     }
 }

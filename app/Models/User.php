@@ -36,6 +36,15 @@ final class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+    protected $fillable = [
+        'name',
+        'email',
+        'email_verified_at',
+        'password',
+        'role',
+        'remember_token',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *

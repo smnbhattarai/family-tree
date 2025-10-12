@@ -21,6 +21,12 @@
                     @else
                         @selected($value == old($name))
                     @endif
+                    @if(isset($selected))
+                        @if(is_array($selected))
+                            @if(in_array($value, $selected)) selected @endif
+                        @endif
+                        @selected($value == $selected)
+                    @endif
                 >
                     {{ $display }}
                 </option>

@@ -22,7 +22,6 @@ final class FamilyFactory extends Factory
             'first_name' => fake()->firstName(),
             'middle_name' => fake()->randomElement(['', 'P', 'L', 'R']),
             'last_name' => fake()->lastName(),
-            'avatar' => 'https://picsum.photos/'.random_int(30, 90),
             'email' => fake()->email(),
             'phone' => fake()->phoneNumber(),
             'address' => fake()->address(),

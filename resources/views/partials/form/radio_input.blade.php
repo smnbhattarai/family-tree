@@ -11,6 +11,7 @@
                     value="{{ $value }}"
                     {{ isset($required) ? ($required ? 'required' : '') : '' }}
                     @checked($value == old($name))
+                    @checked(isset($checked) && ($checked == $value))
                 >
                 <label class="form-check-label" for="{{$id ?? ($name ?? '') }}{{ $value }}">{{ $display }}</label>
             </div>
