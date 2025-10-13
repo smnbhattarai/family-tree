@@ -26,7 +26,7 @@ return new class extends Migration
             $table->date('dob')->nullable();
             $table->unsignedBigInteger('father_id')->nullable();
             $table->unsignedBigInteger('mother_id')->nullable();
-            $table->string('spouse')->nullable();
+            $table->string('spouse')->default('[]');
             $table->string('gender', 8);
             $table->timestamps();
         });

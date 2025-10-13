@@ -20,6 +20,10 @@
                         <a class="nav-link {{ request()->routeIs('page.family') ? 'active' : '' }}"
                            href="{{ route('page.family') }}">{{ __('Explore Family') }}</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('page.search.family') ? 'active' : '' }}"
+                           href="{{ route('page.search.family') }}">{{ __('Search Family') }}</a>
+                    </li>
                 @endauth
             </ul>
 

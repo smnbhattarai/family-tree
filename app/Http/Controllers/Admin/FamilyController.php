@@ -18,7 +18,8 @@ final class FamilyController
      */
     public function index(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
-        $families = Cache::remember('admin.family.index', 5, fn () => Family::all());
+        // $families = Cache::remember('admin.family.index', 24 * 60 * 60, fn () => Family::all());
+        $families = Family::all();
 
         return view('admin.family.index', ['families' => $families]);
     }

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Observers\FamilyObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,9 +35,8 @@ final class Family extends Model
     public function spouses(): ?\Illuminate\Database\Eloquent\Collection
     {
         if ($this->spouse) {
-            $spouse_ids = json_decode($this->spouse);
 
-            return self::query()->findMany($spouse_ids);
+            return self::query()->findMany($this->spouse);
         }
 
         return null;
@@ -50,7 +50,7 @@ final class Family extends Model
     public function thumbnailPath(): string
     {
         if (! $this->avatar) {
-            return '';
+            return asset('assets/images/avatar.png');
         }
 
         $originalFile = $this->avatar;
@@ -85,5 +85,22 @@ final class Family extends Model
         $thumbFilename = "thumb-$filename";
 
         return 'thumbnail/'.$thumbFilename;
+    }
+
+    public function getChildrensId()
+    {
+        return self::query()->where('father_id', $this->id)->orWhere('mother_id', $this->id)->pluck('id')->toArray();
+    }
+
+    /**
+     * Get the spouse.
+     */
+    protected function spouse(): Attribute
+    {
+        return Attribute::make(
+
+            get: fn (?string $value): mixed => $value === null || $value === '' || $value === '0' ? [] : array_map('intval', json_decode($value)),
+
+        );
     }
 }

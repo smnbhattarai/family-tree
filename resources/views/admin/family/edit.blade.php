@@ -139,7 +139,7 @@
                                 'name' => 'spouse',
                                 'options' => $spouse,
                                 'multiple' => true,
-                                'selected' => $family->spouse ? json_decode($family->spouse) : [],
+                                'selected' => $family->spouse ? ($family->spouse) : [],
                             ])
                         </div>
                         <div class="col">
