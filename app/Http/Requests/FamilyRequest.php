@@ -13,7 +13,7 @@ final class FamilyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->isAdmin();
+        return auth()->user() && auth()->user()->isAdmin();
     }
 
     /**

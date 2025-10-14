@@ -22,7 +22,7 @@ final class CheckAdmin
             abort(401);
         }
 
-        if (! Auth::user()->isAdmin()) {
+        if (Auth::user() && ! Auth::user()->isAdmin()) {
             abort(403);
         }
 

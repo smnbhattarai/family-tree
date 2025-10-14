@@ -5,25 +5,34 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Family;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 final class PageController
 {
-    public function home(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+    public function home(): Factory|View
     {
         return view('home');
     }
 
-    public function family(): \Illuminate\Contracts\View\View
+    public function family(): View
     {
         // $families = Cache::remember('admin.family.index', 24 * 60 * 60, fn () => Family::all());
         $families = Family::all();
 
-        $mainperson = Family::query()->where('email', auth()->user()->email)->first();
-        if (! $mainperson) {
+        $mainPerson = null;
+
+        if (auth()->user()) {
+            $mainPerson = Family::query()->where('email', auth()->user()->email)->first();
+        }
+
+        if (! $mainPerson) {
             $randomPerson = Family::query()->inRandomOrder()->first();
         }
+
         $mainId = $randomPerson->id ?? null;
 
         $data = [];
@@ -52,29 +61,29 @@ final class PageController
         return view('page.family', ['data' => json_encode($data), 'mainId' => $mainId]);
     }
 
-    public function searchFamily(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+    public function searchFamily(): Factory|View
     {
         $family = Family::query()->find(6);
 
         return view('page.family-search', ['family' => $family]);
     }
 
-    public function searchFamilyData(Request $request)
+    public function searchFamilyData(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'q' => 'required|string',
         ]);
 
-        $q = $validated['q'];
+        $q = (string) $validated['q'];
 
         $families = Family::query()
-            ->where('first_name', 'LIKE', '%'.$q.'%')
-            ->orWhere('middle_name', 'LIKE', '%'.$q.'%')
-            ->orWhere('last_name', 'LIKE', '%'.$q.'%')
-            ->orWhere('email', 'LIKE', '%'.$q.'%')
-            ->orWhere('phone', 'LIKE', '%'.$q.'%')
-            ->orWhere('address', 'LIKE', '%'.$q.'%')
-            ->orWhere('dob', 'LIKE', '%'.$q.'%')
+            ->where('first_name', 'LIKE', "%$q%")
+            ->orWhere('middle_name', 'LIKE', "%$q%")
+            ->orWhere('last_name', 'LIKE', "%$q%")
+            ->orWhere('email', 'LIKE', "%$q%")
+            ->orWhere('phone', 'LIKE', "%$q%")
+            ->orWhere('address', 'LIKE', "%$q%")
+            ->orWhere('dob', 'LIKE', "%$q%")
             ->get();
 
         $results = [];
@@ -104,7 +113,7 @@ final class PageController
                 'father' => $family->father ? $family->father->name() : '-',
                 'mother' => $family->mother ? $family->mother->name() : '-',
                 'spouse' => $betterHalf,
-                'updated_at' => $family->updated_at->diffForHumans(),
+                'updated_at' => $family->updated_at ? $family->updated_at->diffForHumans() : null,
             ];
         }
 

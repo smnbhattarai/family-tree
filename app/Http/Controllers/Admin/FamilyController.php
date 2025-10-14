@@ -6,6 +6,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\FamilyRequest;
 use App\Models\Family;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -16,7 +19,7 @@ final class FamilyController
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+    public function index(): View|Factory
     {
         // $families = Cache::remember('admin.family.index', 24 * 60 * 60, fn () => Family::all());
         $families = Family::all();
@@ -27,7 +30,7 @@ final class FamilyController
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+    public function create(): Factory|View
     {
         $fathers = Family::query()->where('gender', 'M')->get(['id', 'first_name', 'middle_name', 'last_name']);
         $mothers = Family::query()->where('gender', 'F')->get(['id', 'first_name', 'middle_name', 'last_name']);
@@ -54,15 +57,16 @@ final class FamilyController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(FamilyRequest $request)
+    public function store(FamilyRequest $request): RedirectResponse
     {
         $data = $request->validated();
+        $fName = $data['first_name'];
 
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
 
             // process original image
-            $filename = Str::slug((string) $data['first_name']).'-'.Str::random(8);
+            $filename = Str::slug($fName).'-'.Str::random(8);
             $thumbImage = Image::read($file)->scaleDown(150, 150);
 
             $file->move(public_path('avatar'), $filename.'.'.$file->getClientOriginalExtension());
@@ -85,7 +89,7 @@ final class FamilyController
     /**
      * Display the specified resource.
      */
-    public function show(Family $family): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+    public function show(Family $family): Factory|View
     {
         return view('admin.family.show', ['family' => $family]);
     }
@@ -93,7 +97,7 @@ final class FamilyController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Family $family): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+    public function edit(Family $family): Factory|View
     {
         $fathers = Family::query()->where('gender', 'M')->get(['id', 'first_name', 'middle_name', 'last_name']);
         $mothers = Family::query()->where('gender', 'F')->get(['id', 'first_name', 'middle_name', 'last_name']);
@@ -120,15 +124,16 @@ final class FamilyController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Family $family, FamilyRequest $request)
+    public function update(Family $family, FamilyRequest $request): RedirectResponse
     {
         $data = $request->validated();
+        $fName = $data['first_name'];
 
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
 
             // process original image
-            $filename = Str::slug((string) $data['first_name']).'-'.Str::random(8);
+            $filename = Str::slug($fName).'-'.Str::random(8);
             $thumbImage = Image::read($file)->scaleDown(150, 150);
 
             $file->move(public_path('avatar'), $filename.'.'.$file->getClientOriginalExtension());
@@ -154,7 +159,7 @@ final class FamilyController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Family $family)
+    public function destroy(Family $family): RedirectResponse
     {
         $this->deleteAvatar($family);
         $family->delete();

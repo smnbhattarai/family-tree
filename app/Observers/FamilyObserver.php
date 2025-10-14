@@ -35,7 +35,7 @@ final class FamilyObserver
      */
     public function deleted(Family $family): void
     {
-        $this->deleteUser($family->email);
+        $this->deleteUser((string) $family->email);
     }
 
     /**
@@ -60,7 +60,7 @@ final class FamilyObserver
 
             if ($family->email !== $family->getOriginal('email')) {
                 // delete old user
-                $this->deleteUser($family->getOriginal('email'));
+                $this->deleteUser((string) $family->getOriginal('email'));
             }
             if (! User::query()->where('email', $family->email)->first()) {
                 User::create([
@@ -76,7 +76,7 @@ final class FamilyObserver
 
     }
 
-    private function deleteUser($email): void
+    private function deleteUser(string $email): void
     {
         User::query()->where('email', $email)->delete();
     }
@@ -84,11 +84,11 @@ final class FamilyObserver
     private function updateSpouse(Family $family): void
     {
         // When spouse is added to a family member, assign reverse relation as well
-        $spouseIds = $family->spouse;
-        if (! empty($spouseIds)) {
+        $spouseIds = (array) $family->spouse;
+        if ($spouseIds !== []) {
             $spouses = Family::query()->findMany($spouseIds);
             foreach ($spouses as $spouse) {
-                $spouseData = $spouse->spouse;
+                $spouseData = (array) $spouse->spouse;
                 $spouseData[] = $family->id;
                 $spouseData = array_unique($spouseData);
                 DB::table('families')->where('id', $spouse->id)->update(['spouse' => json_encode($spouseData)]);

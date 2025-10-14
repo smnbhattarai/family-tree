@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Observers\FamilyObserver;
+use Database\Factories\FamilyFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,24 +17,28 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 #[ObservedBy(FamilyObserver::class)]
 final class Family extends Model
 {
+    /** @use HasFactory<FamilyFactory> */
     use HasFactory;
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return HasOne<Family, Family> */
     public function father(): HasOne
     {
         return $this->hasOne(self::class, 'id', 'father_id');
     }
 
+    /** @return HasOne<Family, Family> */
     public function mother(): HasOne
     {
         return $this->hasOne(self::class, 'id', 'mother_id');
     }
 
-    public function spouses(): ?\Illuminate\Database\Eloquent\Collection
+    public function spouses(): ?Collection
     {
         if ($this->spouse) {
 
@@ -87,7 +93,7 @@ final class Family extends Model
         return 'thumbnail/'.$thumbFilename;
     }
 
-    public function getChildrensId()
+    public function getChildrensId(): array
     {
         return self::query()->where('father_id', $this->id)->orWhere('mother_id', $this->id)->pluck('id')->toArray();
     }
