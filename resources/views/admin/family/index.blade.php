@@ -18,7 +18,6 @@
                     <th scope="col">{{ __('Address') }}</th>
                     <th scope="col">{{ __('Father') }}</th>
                     <th scope="col">{{ __('Mother') }}</th>
-                    <th scope="col">{{ __('Spouse') }}</th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
@@ -40,9 +39,8 @@
                         <td>{{ $family->email }}</td>
                         <td>{{ $family->phone }}</td>
                         <td>{{ $family->address }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ $family?->father?->name() }}</td>
+                        <td>{{ $family?->mother?->name() }}</td>
                         <td>
                             <a class="btn btn-primary btn-sm" href="{{ route('admin.family.show', $family->id) }}" role="button"><i class="bi bi-eye-fill"></i></a>
                             <a class="btn btn-info btn-sm" href="{{ route('admin.family.edit', $family->id) }}" role="button"><i class="bi bi-pencil-fill"></i></a>
@@ -78,7 +76,9 @@
     <script src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            new DataTable('#familyTable');
+            new DataTable('#familyTable', {
+                pageLength: 25
+            });
         });
     </script>
 @endsection

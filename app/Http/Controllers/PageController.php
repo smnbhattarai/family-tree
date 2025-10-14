@@ -101,8 +101,8 @@ final class PageController
                 'email' => $family->email ?? '-',
                 'phone' => $family->phone ?? '-',
                 'address' => $family->address ?? '-',
-                'father' => $family?->father?->name() ?? '-',
-                'mother' => $family?->mother?->name() ?? '-',
+                'father' => $family->father ? $family->father->name() : '-',
+                'mother' => $family->mother ? $family->mother->name() : '-',
                 'spouse' => $betterHalf,
                 'updated_at' => $family->updated_at->diffForHumans(),
             ];

@@ -10,13 +10,14 @@
             <div class="form-floating mb-3">
                 <input type="search" class="form-control" id="search" placeholder="Search family members ...">
                 <label for="search">{{ __('Search family members...') }}</label>
+                <div id="searchResultCount" class="form-text"></div>
             </div>
         </div>
         <div class="col-md-4"></div>
     </div>
 
 
-    <div class="row" id="personCard">
+    <div class="row sha" id="personCard">
 
     </div>
 
@@ -25,9 +26,11 @@
 @section('footerScript')
     <script>
         const card = document.querySelector('#personCard');
+        const searchResultCount = document.querySelector('#searchResultCount');
         document.querySelector('#search').addEventListener('keyup', function (e) {
             let query = this.value;
             card.innerHTML = '';
+            searchResultCount.innerHTML = '';
             if (query.length > 1) {
                 searchFamily(query);
             }
@@ -63,7 +66,7 @@
             data.forEach(function(d) {
                 html += `
                 <div class="col-md-4">
-                    <div class="card mb-3">
+                    <div class="card mb-4 shadow-lg">
                         <div class="row g-0">
                             <div class="col-md-4">
                                 <img src="${d.thumbnail}" class="img-fluid rounded-start" alt="${d.first_name}">
@@ -117,6 +120,12 @@
             });
 
             card.innerHTML = html;
+            if(data.length <= 1) {
+                searchResultCount.innerText = `Showing ` + data.length + ` result ...`;
+            } else {
+                searchResultCount.innerText = `Showing ` + data.length + ` results ...`;
+            }
+
         }
     </script>
 @endsection
