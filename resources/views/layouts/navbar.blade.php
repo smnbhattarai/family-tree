@@ -36,6 +36,9 @@
                         <li class="nav-item me-3 me-lg-0">
                             <a class="nav-link {{ request()->routeIs('admin.family.index') ? 'active' : '' }}" href="{{ route('admin.family.index') }}">{{ __('Family List') }}</a>
                         </li>
+                        <li class="nav-item me-3 me-lg-0">
+                            <a class="nav-link {{ request()->routeIs('admin.page.users') ? 'active' : '' }}" href="{{ route('admin.page.users') }}">{{ __('User List') }}</a>
+                        </li>
                     @endif
                     <li class="nav-item me-3 me-lg-0">
                         <a class="nav-link" href="javascript:void(0)"

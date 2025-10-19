@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Admin\FamilyController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
@@ -26,4 +27,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Admin related routes
 Route::middleware(['auth', 'verified', 'is.admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('family', FamilyController::class);
+    Route::get('users', [UserController::class, 'users'])->name('page.users');
 });
