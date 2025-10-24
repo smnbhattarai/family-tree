@@ -9,7 +9,6 @@ use App\Models\Family;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
@@ -21,7 +20,6 @@ final class FamilyController
      */
     public function index(): View|Factory
     {
-        // $families = Cache::remember('admin.family.index', 24 * 60 * 60, fn () => Family::all());
         $families = Family::all();
 
         return view('admin.family.index', ['families' => $families]);

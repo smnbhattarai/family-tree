@@ -9,7 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 final class PageController
 {
@@ -20,7 +19,6 @@ final class PageController
 
     public function family(): View
     {
-        // $families = Cache::remember('admin.family.index', 24 * 60 * 60, fn () => Family::all());
         $families = Family::all();
 
         $mainPerson = null;
@@ -29,11 +27,12 @@ final class PageController
             $mainPerson = Family::query()->where('email', auth()->user()->email)->first();
         }
 
-        if (! $mainPerson) {
+        if ($mainPerson) {
+            $mainId = $mainPerson->id;
+        } else {
             $randomPerson = Family::query()->inRandomOrder()->first();
+            $mainId = $randomPerson->id;
         }
-
-        $mainId = $randomPerson->id ?? null;
 
         $data = [];
 

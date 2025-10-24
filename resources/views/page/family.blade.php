@@ -41,7 +41,8 @@
 
             setTimeout(() => {
                 const tree = chart.store.getTree();
-                const datum = tree.data[Math.floor(tree.data.length * Math.random())]  // random card
+                console.log(tree.data);
+                const datum = tree.data[0]  // random card
                 f3.handlers.cardToMiddle({
                     datum,
                     svg: chart.svg,

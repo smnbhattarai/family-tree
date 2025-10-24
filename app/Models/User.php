@@ -62,4 +62,9 @@ final class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->role === 'admin';
     }
+
+    public function firstName(): string
+    {
+        return explode(' ', $this->name)[0] ?? '';
+    }
 }

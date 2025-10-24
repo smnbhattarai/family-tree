@@ -8,12 +8,16 @@
         <div class="col-md-4"></div>
         <div class="col-md-4 mb-5">
             <div class="form-floating mb-3">
-                <input type="search" class="form-control" id="search" placeholder="Search family members ...">
+                <input type="search" class="form-control form-control-sm" id="search" placeholder="Search family members ...">
                 <label for="search">{{ __('Search family members...') }}</label>
                 <div id="searchResultCount" class="form-text"></div>
             </div>
         </div>
-        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div id="spinner" class="spinner-border text-primary" role="status" style="margin-top: 10px;display: none;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     </div>
 
 
@@ -25,46 +29,60 @@
 
 @section('footerScript')
     <script>
-        const card = document.querySelector('#personCard');
-        const searchResultCount = document.querySelector('#searchResultCount');
-        document.querySelector('#search').addEventListener('keyup', function (e) {
-            let query = this.value;
-            card.innerHTML = '';
-            searchResultCount.innerHTML = '';
-            if (query.length > 1) {
-                searchFamily(query);
-            }
-        });
 
-        async function searchFamily(q) {
-            const url = '{{ route("page.search.familyData") }}';
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        document.addEventListener("DOMContentLoaded", function () {
+            const card = document.querySelector('#personCard');
+            const searchResultCount = document.querySelector('#searchResultCount');
+            const spinner = document.querySelector('#spinner');
 
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                    },
-                    body: JSON.stringify({q}),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
+            // Start searching ...
+            document.querySelector('#search').addEventListener('keyup', function (e) {
+                let query = this.value;
+                card.innerHTML = '';
+                searchResultCount.innerHTML = '';
+                if (query.length > 1) {
+                    searchFamily(query);
                 }
+            });
 
-                const data = await response.json();
-                displayFamilyDetail(data);
-            } catch (error) {
-                console.error('Error fetching data:', error.message);
+            // Populate search with user's name initially
+            setTimeout(function() {
+                let searchInput = document.querySelector('#search');
+                searchInput.value = "{{ auth()->user()->firstName() }}";
+                searchInput.dispatchEvent(new Event('keyup', { bubbles: true }));
+            }, 1000);
+
+            async function searchFamily(q) {
+                spinner.style.display = 'block';
+                const url = '{{ route("page.search.familyData") }}';
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                        body: JSON.stringify({q}),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    displayFamilyDetail(data);
+                } catch (error) {
+                    console.error('Error fetching data:', error.message);
+                }
+                spinner.style.display = 'none';
             }
-        }
 
-        function displayFamilyDetail(data){
-            let html = '';
-            data.forEach(function(d) {
-                html += `
+            function displayFamilyDetail(data){
+                let html = '';
+                data.forEach(function(d) {
+                    html += `
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-lg">
                         <div class="row g-0">
@@ -117,15 +135,17 @@
                     </div>
                 </div>
                 `;
-            });
+                });
 
-            card.innerHTML = html;
-            if(data.length <= 1) {
-                searchResultCount.innerText = `Showing ` + data.length + ` result ...`;
-            } else {
-                searchResultCount.innerText = `Showing ` + data.length + ` results ...`;
+                card.innerHTML = html;
+                if(data.length <= 1) {
+                    searchResultCount.innerText = `Showing ` + data.length + ` result ...`;
+                } else {
+                    searchResultCount.innerText = `Showing ` + data.length + ` results ...`;
+                }
+
             }
+        });
 
-        }
     </script>
 @endsection
