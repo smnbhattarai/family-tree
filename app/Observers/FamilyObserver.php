@@ -6,6 +6,7 @@ namespace App\Observers;
 
 use App\Models\Family;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -19,6 +20,7 @@ final class FamilyObserver
     {
         $this->updateUser($family);
         $this->updateSpouse($family);
+        $this->deleteCache();
     }
 
     /**
@@ -28,6 +30,7 @@ final class FamilyObserver
     {
         $this->updateUser($family);
         $this->updateSpouse($family);
+        $this->deleteCache();
     }
 
     /**
@@ -36,6 +39,7 @@ final class FamilyObserver
     public function deleted(Family $family): void
     {
         $this->deleteUser((string) $family->email);
+        $this->deleteCache();
     }
 
     /**
@@ -93,6 +97,14 @@ final class FamilyObserver
                 $spouseData = array_unique($spouseData);
                 DB::table('families')->where('id', $spouse->id)->update(['spouse' => json_encode($spouseData)]);
             }
+        }
+    }
+
+    private function deleteCache(): void
+    {
+        $cacheKeys = ['family.all'];
+        foreach ($cacheKeys as $cache_key) {
+            Cache::forget($cache_key);
         }
     }
 }

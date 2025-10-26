@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 final class PageController
 {
@@ -19,7 +20,7 @@ final class PageController
 
     public function family(): View
     {
-        $families = Family::all();
+        $families = Cache::remember('family.all', 24 * 60 * 60, fn () => Family::with('father', 'mother')->get());
 
         $mainPerson = null;
 
