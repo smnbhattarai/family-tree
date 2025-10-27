@@ -108,6 +108,7 @@ final class PageController
             }
 
             $results[] = [
+                'id' => $family->id,
                 'first_name' => $family->first_name,
                 'middle_name' => $family->middle_name ?? '-',
                 'last_name' => $family->last_name,
@@ -127,5 +128,10 @@ final class PageController
         }
 
         return response()->json($results);
+    }
+
+    public function showFamily(Family $family): Factory|View
+    {
+        return view('page.family-show', ['family' => $family]);
     }
 }

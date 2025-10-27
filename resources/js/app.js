@@ -59,3 +59,25 @@ window.performMark = function (contentSelector, searchValueSelector) {
         },
     });
 };
+
+window.fadeIn = function (selector, duration = "fast") {
+    const tblContainer = document.querySelector(selector);
+    let speed = 20;
+    if (duration === "fast") {
+        speed = 40;
+    } else if (duration === "medium") {
+        speed = 80;
+    } else if (duration === "slow") {
+        speed = 160;
+    }
+
+    let opacity = 0;
+    let intervalID = setInterval(function () {
+        if (opacity < 1) {
+            opacity = opacity + 0.1;
+            tblContainer.style.opacity = opacity;
+        } else {
+            clearInterval(intervalID);
+        }
+    }, speed);
+};

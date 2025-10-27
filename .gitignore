@@ -23,5 +23,5 @@ yarn-error.log
 /.vscode
 /.zed
 /tmp
-/storage/debugbar
+/storage
 public/avatar/

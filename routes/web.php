@@ -19,6 +19,7 @@ Route::post('login', [AuthController::class, 'login'])->name('login');
 // Authorized and verified user only
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('family', [PageController::class, 'family'])->name('page.family');
+    Route::get('family/{family}', [PageController::class, 'showFamily'])->name('page.family.show');
     Route::get('search-family', [PageController::class, 'searchFamily'])->name('page.search.family');
     Route::post('api/search-family', [PageController::class, 'searchFamilyData'])->name('page.search.familyData');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
