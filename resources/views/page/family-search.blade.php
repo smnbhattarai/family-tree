@@ -90,11 +90,10 @@
                       <div class="row g-0">
                         <div class="col-md-4">
                           <img src="${d.thumbnail}" class="img-fluid rounded-start" alt="${d.first_name}">
-                          <p class="mt-4 text-center"><a href="family/${d.id}" target="_blank" class="btn btn-primary btn-sm">{{ __('Detail') }}</a></p>
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
-                            <h5 class="card-title">${d.name}</h5>
+                            <h5 class="card-title"><a href="family/${d.id}" target="_blank" class="card-link">${d.name}</a></h5>
                                 <p class="card-text">{{ __('Address') }}: ${d.address}</p>
                                 <p class="card-text">{{ __('Phone') }}: ${d.phone}</p>
                                 <p class="card-text">{{ __('Gender') }}: ${d.gender}</p>

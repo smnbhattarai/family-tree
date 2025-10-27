@@ -66,7 +66,7 @@ final class FamilyController
 
             // process original image
             $filename = Str::slug($fName).'-'.Str::random(8);
-            $thumbImage = Image::read($file)->scaleDown(250, 250);
+            $thumbImage = Image::read($file)->scaleDown(300, 300);
 
             $file->move(public_path('avatar'), $filename.'.'.$file->getClientOriginalExtension());
             $data['avatar'] = 'avatar/'.$filename.'.'.$file->getClientOriginalExtension();
@@ -133,14 +133,14 @@ final class FamilyController
 
             // process original image
             $filename = Str::slug($fName).'-'.Str::random(8);
-            $thumbImage = Image::read($file)->scaleDown(150, 150);
+            $thumbImage = Image::read($file)->scaleDown(300, 300);
 
             $file->move(public_path('avatar'), $filename.'.'.$file->getClientOriginalExtension());
             $data['avatar'] = 'avatar/'.$filename.'.'.$file->getClientOriginalExtension();
 
             // process thumbnail
             $thumbFilename = 'thumb-'.$filename.'.'.$file->getClientOriginalExtension();
-            Storage::disk('public_avatar')->put("thumbnail/$thumbFilename", $thumbImage->encodeByExtension($file->getClientOriginalExtension(), quality: 70));
+            Storage::disk('public_avatar')->put("thumbnail/$thumbFilename", $thumbImage->encodeByExtension($file->getClientOriginalExtension(), quality: 90));
 
             // Delete old avatar file
             $this->deleteAvatar($family);
