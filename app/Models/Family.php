@@ -105,6 +105,10 @@ final class Family extends Model
 
     public function siblings(): ?Collection
     {
+        if (! $this->father_id || ! $this->mother_id) {
+            return null;
+        }
+
         return self::query()
             ->where(function ($query): void {
                 $query->where('father_id', $this->father_id);

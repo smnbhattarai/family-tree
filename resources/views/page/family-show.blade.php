@@ -72,7 +72,8 @@
                         <tr>
                             <th scope="row">{{ __('Spouse') }}</th>
                             <td>
-                                @foreach($family->spouses() as $spouse)
+                                @if($spouses = $family->spouses())
+                                @foreach($spouses as $spouse)
                                     <a href="{{ route('page.family.show', $spouse->id) }}">{{ $spouse->name() }}</a>
                                     @if($spouse->gender == 'M')
                                         <sup class="btn-male"><i class="bi bi-gender-male"></i></sup>
@@ -81,12 +82,14 @@
                                     @endif
                                     <br>
                                 @endforeach
+                                @endif
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">{{ __('Children(s)') }}</th>
                             <td>
-                                @foreach($family->childrens() as $children)
+                                @if($childrens = $family->childrens())
+                                @foreach($childrens as $children)
                                     <a href="{{ route('page.family.show', $children->id) }}">{{ $children->name() }}</a>
                                     @if($children->gender == 'M')
                                         <sup class="btn-male"><i class="bi bi-gender-male"></i></sup>
@@ -95,12 +98,14 @@
                                     @endif
                                     <br>
                                 @endforeach
+                                @endif
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">{{ __('Sibling(s)') }}</th>
                             <td>
-                                @foreach($family->siblings() as $sibling)
+                                @if($siblings = $family->siblings())
+                                @foreach($siblings as $sibling)
                                     <a href="{{ route('page.family.show', $sibling->id) }}">{{ $sibling->name() }}</a>
                                     @if($sibling->gender == 'M')
                                         <sup class="btn-male"><i class="bi bi-gender-male"></i></sup>
@@ -109,6 +114,7 @@
                                     @endif
                                     <br>
                                 @endforeach
+                                @endif
                             </td>
                         </tr>
                         </tbody>

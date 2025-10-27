@@ -33,7 +33,7 @@
                 .setCardYSpacing(150)
 
             chart.setCardHtml()
-                .setCardDisplay([["label"], ["phone"]]).setCardDim({h: 70});
+                .setCardDisplay([["label"]]).setCardDim({h: 70});
 
             chart.updateMainId({{ $mainId }})
 
