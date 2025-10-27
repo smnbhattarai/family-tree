@@ -87,42 +87,13 @@ final class PageController
         $results = [];
 
         foreach ($families as $family) {
-            $betterHalf = [];
-            if (! empty($family->spouse)) {
-                $spouses = Family::query()->findMany($family->spouse);
-                foreach ($spouses as $spouse) {
-                    $betterHalf[] = [
-                        $spouse->name(),
-                    ];
-                }
-            }
-
-            $children = [];
-            $childrenData = $family->childrens();
-            if (! empty($childrenData)) {
-                foreach ($childrenData as $child) {
-                    $children[] = [
-                        $child->name(),
-                    ];
-                }
-            }
-
             $results[] = [
                 'id' => $family->id,
-                'first_name' => $family->first_name,
-                'middle_name' => $family->middle_name ?? '-',
-                'last_name' => $family->last_name,
                 'name' => $family->name(),
                 'thumbnail' => $family->thumbnailPath(),
-                'dob' => $family->dob ?? '-',
                 'gender' => $family->gender,
-                'email' => $family->email ?? '-',
                 'phone' => $family->phone ?? '-',
                 'address' => $family->address ?? '-',
-                'father' => $family->father ? $family->father->name() : '-',
-                'mother' => $family->mother ? $family->mother->name() : '-',
-                'spouse' => $betterHalf,
-                'children' => $children,
                 'updated_at' => $family->updated_at ? $family->updated_at->diffForHumans() : null,
             ];
         }

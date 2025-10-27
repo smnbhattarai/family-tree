@@ -8,7 +8,7 @@
 
         <div class="col-md-12">
 
-            <div id="FamilyChart" class="f3" style="width:100%;height:500px;"></div>
+            <div id="FamilyChart" class="f3" style="width:100%;height:500px;background-color: darkslategrey;"></div>
 
         </div>
 
@@ -24,7 +24,7 @@
 
         document.addEventListener("DOMContentLoaded", function () {
 
-            document.querySelector("#FamilyChart").style.height = Math.floor(window.innerHeight * 0.85) + 'px';
+            document.querySelector("#FamilyChart").style.height = Math.floor(window.innerHeight * 0.92) + 'px';
 
             // Create the chart
             const chart = f3.createChart('#FamilyChart', data)

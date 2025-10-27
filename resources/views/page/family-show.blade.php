@@ -48,6 +48,11 @@
                             <td>
                                 @if($family->father)
                                 <a href="{{ route('page.family.show', $family->father->id) }}">{{ $family->father->name() }}</a>
+                                    @if($family->father->gender == 'M')
+                                        <sup class="btn-male"><i class="bi bi-gender-male"></i></sup>
+                                    @else
+                                        <sup class="btn-female"><i class="bi bi-gender-female"></i></sup>
+                                    @endif
                                 @endif
                             </td>
                         </tr>
@@ -56,27 +61,54 @@
                             <td>
                                 @if($family->mother)
                                 <a href="{{ route('page.family.show', $family->mother->id) }}">{{ $family->mother->name() }}</a>
+                                    @if($family->mother->gender == 'M')
+                                        <sup class="btn-male"><i class="bi bi-gender-male"></i></sup>
+                                    @else
+                                        <sup class="btn-female"><i class="bi bi-gender-female"></i></sup>
+                                    @endif
                                 @endif
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">{{ __('Spouse') }}</th>
                             <td>
-                                @if($family->spouses())
                                 @foreach($family->spouses() as $spouse)
-                                    <a href="{{ route('page.family.show', $spouse->id) }}">{{ $spouse->name() }}</a><br>
+                                    <a href="{{ route('page.family.show', $spouse->id) }}">{{ $spouse->name() }}</a>
+                                    @if($spouse->gender == 'M')
+                                        <sup class="btn-male"><i class="bi bi-gender-male"></i></sup>
+                                    @else
+                                        <sup class="btn-female"><i class="bi bi-gender-female"></i></sup>
+                                    @endif
+                                    <br>
                                 @endforeach
-                                @endif
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">{{ __('Children(s)') }}</th>
                             <td>
-                                @if($family->childrens())
-                                    @foreach($family->childrens() as $children)
-                                        <a href="{{ route('page.family.show', $children->id) }}">{{ $children->name() }}</a><br>
-                                    @endforeach
-                                @endif
+                                @foreach($family->childrens() as $children)
+                                    <a href="{{ route('page.family.show', $children->id) }}">{{ $children->name() }}</a>
+                                    @if($children->gender == 'M')
+                                        <sup class="btn-male"><i class="bi bi-gender-male"></i></sup>
+                                    @else
+                                        <sup class="btn-female"><i class="bi bi-gender-female"></i></sup>
+                                    @endif
+                                    <br>
+                                @endforeach
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">{{ __('Sibling(s)') }}</th>
+                            <td>
+                                @foreach($family->siblings() as $sibling)
+                                    <a href="{{ route('page.family.show', $sibling->id) }}">{{ $sibling->name() }}</a>
+                                    @if($sibling->gender == 'M')
+                                        <sup class="btn-male"><i class="bi bi-gender-male"></i></sup>
+                                    @else
+                                        <sup class="btn-female"><i class="bi bi-gender-female"></i></sup>
+                                    @endif
+                                    <br>
+                                @endforeach
                             </td>
                         </tr>
                         </tbody>

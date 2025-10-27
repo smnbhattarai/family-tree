@@ -103,6 +103,17 @@ final class Family extends Model
         return self::query()->where('father_id', $this->id)->orWhere('mother_id', $this->id)->pluck('id')->toArray();
     }
 
+    public function siblings(): ?Collection
+    {
+        return self::query()
+            ->where(function ($query): void {
+                $query->where('father_id', $this->father_id);
+                $query->orWhere('mother_id', $this->mother_id);
+            })
+            ->where('id', '!=', $this->id)
+            ->get();
+    }
+
     /**
      * Get the spouse.
      */

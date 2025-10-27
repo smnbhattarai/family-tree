@@ -21,7 +21,7 @@
 @include('layouts.navbar')
 
 <!--Main layout-->
-<main class="mt-4">
+<main class="mt-2">
     <div class="container-fluid">
 
         @if(session('success') || session('error') || session('info'))

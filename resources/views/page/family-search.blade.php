@@ -41,6 +41,7 @@
                 card.innerHTML = '';
                 searchResultCount.innerHTML = '';
                 if (query.length > 1) {
+                    spinner.style.display = 'block';
                     searchFamily(query);
                 }
             });
@@ -50,10 +51,9 @@
                 let searchInput = document.querySelector('#search');
                 searchInput.value = "{{ auth()->user()->firstName() }}";
                 searchInput.dispatchEvent(new Event('keyup', { bubbles: true }));
-            }, 1000);
+            }, 500);
 
             async function searchFamily(q) {
-                spinner.style.display = 'block';
                 const url = '{{ route("page.search.familyData") }}';
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -89,7 +89,7 @@
                     <div class="card shadow-lg mb-3">
                       <div class="row g-0">
                         <div class="col-md-4">
-                          <img src="${d.thumbnail}" class="img-fluid rounded-start" alt="${d.first_name}">
+                          <img src="${d.thumbnail}" class="img-fluid rounded-start" alt="${d.name}">
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
