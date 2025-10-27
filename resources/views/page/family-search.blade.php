@@ -88,9 +88,9 @@
                     <div class="col-md-4">
                     <div class="card shadow-lg mb-3">
                       <div class="row g-0">
-                        <div class="col-md-4 text-center">
+                        <div class="col-md-4">
                           <img src="${d.thumbnail}" class="img-fluid rounded-start" alt="${d.first_name}">
-                          <p class="mt-4"><a href="family/${d.id}" target="_blank" class="btn btn-primary btn-sm">{{ __('Detail') }}</a></p>
+                          <p class="mt-4 text-center"><a href="family/${d.id}" target="_blank" class="btn btn-primary btn-sm">{{ __('Detail') }}</a></p>
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
