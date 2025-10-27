@@ -69,6 +69,16 @@
                                 @endif
                             </td>
                         </tr>
+                        <tr>
+                            <th scope="row">{{ __('Children(s)') }}</th>
+                            <td>
+                                @if($family->childrens())
+                                    @foreach($family->childrens() as $children)
+                                        <a href="{{ route('admin.family.show', $children->id) }}">{{ $children->name() }}</a><br>
+                                    @endforeach
+                                @endif
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
 

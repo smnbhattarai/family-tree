@@ -48,6 +48,11 @@ final class Family extends Model
         return null;
     }
 
+    public function childrens(): ?Collection
+    {
+        return self::query()->where('father_id', $this->id)->orWhere('mother_id', $this->id)->get();
+    }
+
     public function name(): string
     {
         return "$this->first_name $this->middle_name $this->last_name";

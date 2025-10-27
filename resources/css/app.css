@@ -31,3 +31,8 @@
 legend {
     font-size: 1.1rem;
 }
+
+mark {
+    padding: 0;
+    background-color: #ff0;
+}

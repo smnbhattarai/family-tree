@@ -63,9 +63,7 @@ final class PageController
 
     public function searchFamily(): Factory|View
     {
-        $family = Family::query()->find(6);
-
-        return view('page.family-search', ['family' => $family]);
+        return view('page.family-search');
     }
 
     public function searchFamilyData(Request $request): JsonResponse
@@ -99,6 +97,16 @@ final class PageController
                 }
             }
 
+            $children = [];
+            $childrenData = $family->childrens();
+            if (! empty($childrenData)) {
+                foreach ($childrenData as $child) {
+                    $children[] = [
+                        $child->name(),
+                    ];
+                }
+            }
+
             $results[] = [
                 'first_name' => $family->first_name,
                 'middle_name' => $family->middle_name ?? '-',
@@ -113,6 +121,7 @@ final class PageController
                 'father' => $family->father ? $family->father->name() : '-',
                 'mother' => $family->mother ? $family->mother->name() : '-',
                 'spouse' => $betterHalf,
+                'children' => $children,
                 'updated_at' => $family->updated_at ? $family->updated_at->diffForHumans() : null,
             ];
         }

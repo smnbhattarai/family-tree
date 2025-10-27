@@ -1,16 +1,18 @@
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle.js";
 import * as f3 from "family-chart";
 import tomSelectComplete from "tom-select/src/tom-select.complete.js";
+import Mark from "mark.js/src/lib/mark.js";
 
 window.bootstrap = bootstrap;
 window.f3 = f3;
 window.TomSelect = tomSelectComplete;
+window.Mark = Mark;
 
 // Bootstrap tooltips
-var tooltipTriggerList = [].slice.call(
+let tooltipTriggerList = [].slice.call(
     document.querySelectorAll('[data-bs-toggle="tooltip"]'),
 );
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
 });
 
@@ -44,3 +46,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+window.performMark = function (contentSelector, searchValueSelector) {
+    const markInstance = new Mark(document.querySelector(contentSelector));
+    const keywordInput = document.querySelector(searchValueSelector);
+
+    let keyword = keywordInput.value;
+
+    markInstance.unmark({
+        done: function () {
+            markInstance.mark(keyword, {});
+        },
+    });
+};

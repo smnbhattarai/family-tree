@@ -21,7 +21,7 @@
     </div>
 
 
-    <div class="row sha" id="personCard">
+    <div class="row" id="personCard">
 
     </div>
 
@@ -73,6 +73,7 @@
 
                     const data = await response.json();
                     displayFamilyDetail(data);
+                    performMark("#personCard", "#search");
                 } catch (error) {
                     console.error('Error fetching data:', error.message);
                 }
@@ -86,13 +87,14 @@
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-lg">
                         <div class="row g-0">
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <img src="${d.thumbnail}" class="img-fluid rounded-start" alt="${d.first_name}">
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-10">
                                 <div class="card-body">
                                     <h5 class="card-title">${d.name}</h5>
-                                    <table class="table table-borderless table-responsive">
+                                    <div class="table-responsive">
+                                    <table class="table table-borderless">
                                         <tbody>
                                         <tr>
                                             <th scope="row">{{ __('Date of Birth') }}</th>
@@ -124,10 +126,15 @@
                                         </tr>
                                         <tr>
                                             <th scope="row">{{ __('Spouse') }}</th>
-                                            <td>${d.spouse.join(', ')}</td>
+                                            <td>${d.spouse.join('<br>')}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">{{ __('Children') }}</th>
+                                            <td>${d.children.join('<br>')}</td>
                                         </tr>
                                         </tbody>
                                     </table>
+                                    </div>
                                     <p class="card-text"><small class="text-body-secondary">Last updated ${d.updated_at}</small></p>
                                 </div>
                             </div>
@@ -145,6 +152,7 @@
                 }
 
             }
+
         });
 
     </script>
