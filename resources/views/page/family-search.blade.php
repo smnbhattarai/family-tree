@@ -80,106 +80,40 @@
                 spinner.style.display = 'none';
             }
 
-            function displayFamilyDetail(data){
+
+            function displayFamilyDetail(data) {
                 let html = '';
-                data.forEach(function(d) {
+                data.forEach(function (d) {
                     html += `
-                <div class="col-md-2">
-                    <div class="card shadow-lg mb-4">
-                        <img src="${d.thumbnail}" class="card-img-top" alt="${d.first_name}">
-                        <div class="card-body">
-                            <h5 class="card-title">${d.name}</h5>
-                            <p class="card-text">{{ __('Address') }}: ${d.address}</p>
-                            <p class="card-text">{{ __('Phone') }}: ${d.phone}</p>
-                            <p class="card-text">{{ __('Gender') }}: ${d.gender}</p>
-                            <a href="family/${d.id}" target="_blank" class="card-link">{{ __('Detail') }}</a>
+                    <div class="col-md-4">
+                    <div class="card shadow-lg mb-3">
+                      <div class="row g-0">
+                        <div class="col-md-4 text-center">
+                          <img src="${d.thumbnail}" class="img-fluid rounded-start" alt="${d.first_name}">
+                          <p class="mt-4"><a href="family/${d.id}" target="_blank" class="btn btn-primary btn-sm">{{ __('Detail') }}</a></p>
                         </div>
+                        <div class="col-md-8">
+                          <div class="card-body">
+                            <h5 class="card-title">${d.name}</h5>
+                                <p class="card-text">{{ __('Address') }}: ${d.address}</p>
+                                <p class="card-text">{{ __('Phone') }}: ${d.phone}</p>
+                                <p class="card-text">{{ __('Gender') }}: ${d.gender}</p>
+                                <p class="card-text mt-3"><small class="text-body-secondary">Last updated ${d.updated_at}</small></p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                </div>
+                    </div>
                 `;
                 });
 
                 card.innerHTML = html;
-                if(data.length <= 1) {
+                if (data.length <= 1) {
                     searchResultCount.innerText = `Showing ` + data.length + ` result ...`;
                 } else {
                     searchResultCount.innerText = `Showing ` + data.length + ` results ...`;
                 }
-
             }
-
-            {{--function displayFamilyDetail(data){--}}
-            {{--    let html = '';--}}
-            {{--    data.forEach(function(d) {--}}
-            {{--        html += `--}}
-            {{--    <div class="col-md-4">--}}
-            {{--        <div class="card mb-4 shadow-lg">--}}
-            {{--            <div class="row g-0">--}}
-            {{--                <div class="col-md-2">--}}
-            {{--                    <img src="${d.thumbnail}" class="img-fluid rounded-start" alt="${d.first_name}">--}}
-            {{--                </div>--}}
-            {{--                <div class="col-md-10">--}}
-            {{--                    <div class="card-body">--}}
-            {{--                        <h5 class="card-title">${d.name}</h5>--}}
-            {{--                        <div class="table-responsive">--}}
-            {{--                        <table class="table table-borderless">--}}
-            {{--                            <tbody>--}}
-            {{--                            <tr>--}}
-            {{--                                <th scope="row">{{ __('Date of Birth') }}</th>--}}
-            {{--                                <td>${d.dob}</td>--}}
-            {{--                            </tr>--}}
-            {{--                            <tr>--}}
-            {{--                                <th scope="row">{{ __('Gender') }}</th>--}}
-            {{--                                <td>${d.gender}</td>--}}
-            {{--                            </tr>--}}
-            {{--                            <tr>--}}
-            {{--                                <th scope="row">{{ __('Email') }}</th>--}}
-            {{--                                <td>${d.email}</td>--}}
-            {{--                            </tr>--}}
-            {{--                            <tr>--}}
-            {{--                                <th scope="row">{{ __('Phone') }}</th>--}}
-            {{--                                <td>${d.phone}</td>--}}
-            {{--                            </tr>--}}
-            {{--                            <tr>--}}
-            {{--                                <th scope="row">{{ __('Address') }}</th>--}}
-            {{--                                <td>${d.address}</td>--}}
-            {{--                            </tr>--}}
-            {{--                            <tr>--}}
-            {{--                                <th scope="row">{{ __('Father') }}</th>--}}
-            {{--                                <td>${d.father}</td>--}}
-            {{--                            </tr>--}}
-            {{--                            <tr>--}}
-            {{--                                <th scope="row">{{ __('Mother') }}</th>--}}
-            {{--                                <td>${d.mother}</td>--}}
-            {{--                            </tr>--}}
-            {{--                            <tr>--}}
-            {{--                                <th scope="row">{{ __('Spouse') }}</th>--}}
-            {{--                                <td>${d.spouse.join('<br>')}</td>--}}
-            {{--                            </tr>--}}
-            {{--                            <tr>--}}
-            {{--                                <th scope="row">{{ __('Children') }}</th>--}}
-            {{--                                <td>${d.children.join('<br>')}</td>--}}
-            {{--                            </tr>--}}
-            {{--                            </tbody>--}}
-            {{--                        </table>--}}
-            {{--                        </div>--}}
-            {{--                        <p class="card-text"><small class="text-body-secondary">Last updated ${d.updated_at}</small></p>--}}
-            {{--                    </div>--}}
-            {{--                </div>--}}
-            {{--            </div>--}}
-            {{--        </div>--}}
-            {{--    </div>--}}
-            {{--    `;--}}
-            {{--    });--}}
-
-            {{--    card.innerHTML = html;--}}
-            {{--    if(data.length <= 1) {--}}
-            {{--        searchResultCount.innerText = `Showing ` + data.length + ` result ...`;--}}
-            {{--    } else {--}}
-            {{--        searchResultCount.innerText = `Showing ` + data.length + ` results ...`;--}}
-            {{--    }--}}
-
-            {{--}--}}
 
         });
 

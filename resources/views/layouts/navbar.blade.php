@@ -18,11 +18,11 @@
                 @auth
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('page.family') ? 'active' : '' }}"
-                           href="{{ route('page.family') }}">{{ __('Explore Family') }}</a>
+                           href="{{ route('page.family') }}">{{ __('Explore') }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('page.search.family') ? 'active' : '' }}"
-                           href="{{ route('page.search.family') }}">{{ __('Search Family') }}</a>
+                           href="{{ route('page.search.family') }}">{{ __('Search') }}</a>
                     </li>
                 @endauth
             </ul>
@@ -31,13 +31,13 @@
                 @auth
                     @if(auth()->user()->isAdmin())
                         <li class="nav-item me-3 me-lg-0">
-                            <a class="nav-link {{ request()->routeIs('admin.family.create') ? 'active' : '' }}" href="{{ route('admin.family.create') }}">{{ __('Add Family') }}</a>
+                            <a class="nav-link {{ request()->routeIs('admin.family.create') ? 'active' : '' }}" href="{{ route('admin.family.create') }}">{{ __('Add') }}</a>
                         </li>
                         <li class="nav-item me-3 me-lg-0">
-                            <a class="nav-link {{ request()->routeIs('admin.family.index') ? 'active' : '' }}" href="{{ route('admin.family.index') }}">{{ __('Family List') }}</a>
+                            <a class="nav-link {{ request()->routeIs('admin.family.index') ? 'active' : '' }}" href="{{ route('admin.family.index') }}">{{ __('List') }}</a>
                         </li>
                         <li class="nav-item me-3 me-lg-0">
-                            <a class="nav-link {{ request()->routeIs('admin.page.users') ? 'active' : '' }}" href="{{ route('admin.page.users') }}">{{ __('User List') }}</a>
+                            <a class="nav-link {{ request()->routeIs('admin.page.users') ? 'active' : '' }}" href="{{ route('admin.page.users') }}">{{ __('Users') }}</a>
                         </li>
                     @endif
                     <li class="nav-item me-3 me-lg-0">
