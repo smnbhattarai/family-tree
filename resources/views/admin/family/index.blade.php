@@ -43,8 +43,8 @@
                             <td>{{ $family?->father?->name() }}</td>
                             <td>{{ $family?->mother?->name() }}</td>
                             <td>
-                                <a class="btn btn-primary btn-sm" href="{{ route('admin.family.show', $family->id) }}" role="button"><i class="bi bi-eye-fill"></i></a>
-                                <a class="btn btn-info btn-sm" href="{{ route('admin.family.edit', $family->id) }}" role="button"><i class="bi bi-pencil-fill"></i></a>
+                                <a class="btn btn-primary btn-sm mx-1 mb-1" href="{{ route('admin.family.show', $family->id) }}" role="button"><i class="bi bi-eye-fill"></i></a>
+                                <a class="btn btn-info btn-sm mx-1 mb-1" href="{{ route('admin.family.edit', $family->id) }}" role="button"><i class="bi bi-pencil-fill"></i></a>
                                 <form
                                     action="{{ route('admin.family.destroy', $family->id) }}"
                                     method="POST"
@@ -53,7 +53,7 @@
                                 >
                                     @method('DELETE')
                                     @csrf
-                                    <button class="btn btn-danger btn-sm" type="submit"><i class="bi bi-trash-fill"></i></button>
+                                    <button class="btn btn-danger btn-sm mx-1 mb-1" type="submit"><i class="bi bi-trash-fill"></i></button>
                                 </form>
                             </td>
                         </tr>

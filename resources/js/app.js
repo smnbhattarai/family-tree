@@ -1,10 +1,12 @@
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle.js";
+import * as d3 from "d3";
 import * as f3 from "family-chart";
 import tomSelectComplete from "tom-select/src/tom-select.complete.js";
 import Mark from "mark.js/src/lib/mark.js";
 
 window.bootstrap = bootstrap;
 window.f3 = f3;
+window.d3 = d3;
 window.TomSelect = tomSelectComplete;
 window.Mark = Mark;
 
