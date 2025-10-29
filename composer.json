@@ -13,7 +13,8 @@
         "intervention/image-laravel": "^1.5",
         "laravel/framework": "^12.29.0",
         "laravel/tinker": "^2.10",
-        "nunomaduro/essentials": "^1.0.0"
+        "nunomaduro/essentials": "^1.0.0",
+        "spatie/laravel-backup": "^9.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",
