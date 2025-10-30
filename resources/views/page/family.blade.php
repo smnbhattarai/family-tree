@@ -33,7 +33,19 @@
                 .setSortChildrenFunction((a, b) => a.data.gender === b.data.gender ? 0 : a.data.gender === 'M' ? 1 : -1)
 
             chart.setCardHtml()
-                .setCardDisplay([["label"]]).setCardDim({h: 70});
+                .setCardDisplay([["label"]])
+                .setOnCardUpdate(function (d) {
+                    d3.select(this).select('.card').style('cursor', 'default')
+                    const card = this.querySelector('.card-inner')
+                    d3.select(card)
+                        .append('a')
+                        .attr('href', 'family/' + d.data.id)
+                        .attr('target', '_blank')
+                        .attr('style', 'cursor: pointer; width: 12px; height: 12px;position: absolute; top: 0; right: 0; color:white')
+                        .html(f3.icons.infoSvgIcon())
+                        .select('svg')
+                        .style('padding', '0')
+                });
 
             chart.updateMainId({{ $mainId }})
 
