@@ -13,22 +13,23 @@
     >
         <option value="">{{ __('Choose...') }}</option>
         @if(isset($options))
-            @foreach($options as $value => $display)
+            @foreach($options as $id => $display)
                 <option
-                    value="{{ $value }}"
+                    value="{{ $id }}"
+                    @isset($display['image']) data-image="{{ $display['image'] }}" @endisset
                     @if(is_array(old($name)))
-                        @if(in_array($value, old($name))) selected @endif
+                        @if(in_array($id, old($name))) selected @endif
                     @else
-                        @selected($value == old($name))
+                        @selected($id == old($name))
                     @endif
                     @if(isset($selected))
                         @if(is_array($selected))
-                            @if(in_array($value, $selected)) selected @endif
+                            @if(in_array($id, $selected)) selected @endif
                         @endif
-                        @selected($value == $selected)
+                        @selected($id == $selected)
                     @endif
                 >
-                    {{ $display }}
+                    {{ $display['text'] }}
                 </option>
             @endforeach
         @endif

@@ -30,20 +30,60 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     if (document.querySelector("#father_id") != null) {
         new TomSelect("#father_id", {
-            allowEmptyOption: true,
-            create: true,
+            render: {
+                option: function(data, escape) {
+                    return `<div class="flex items-center">
+                      <img alt="" src="${escape(data.image)}" width="30" height="30" style="border-radius:50%; margin-right:8px;">
+                      <span>${escape(data.text)}</span>
+                    </div>`;
+                },
+                item: function(data, escape) {
+                    return `<div class="flex items-center">
+                      <img alt="" src="${escape(data.image)}" width="25" height="25" style="border-radius:50%; margin-right:6px;">
+                      <span>${escape(data.text)}</span>
+                    </div>`;
+                }
+            },
+            maxItems: 1,
         });
     }
 
     if (document.querySelector("#mother_id") != null) {
         new TomSelect("#mother_id", {
-            allowEmptyOption: true,
-            create: true,
+            render: {
+                option: function(data, escape) {
+                    return `<div class="flex items-center">
+                      <img alt="" src="${escape(data.image)}" width="30" height="30" style="border-radius:50%; margin-right:8px;">
+                      <span>${escape(data.text)}</span>
+                    </div>`;
+                },
+                item: function(data, escape) {
+                    return `<div class="flex items-center">
+                      <img alt="" src="${escape(data.image)}" width="25" height="25" style="border-radius:50%; margin-right:6px;">
+                      <span>${escape(data.text)}</span>
+                    </div>`;
+                }
+            },
+            maxItems: 1,
         });
     }
 
     if (document.querySelector("#spouse") != null) {
         new TomSelect("#spouse", {
+            render: {
+                option: function(data, escape) {
+                    return `<div class="flex items-center">
+                      <img alt="" src="${escape(data.image)}" width="30" height="30" style="border-radius:50%; margin-right:8px;">
+                      <span>${escape(data.text)}</span>
+                    </div>`;
+                },
+                item: function(data, escape) {
+                    return `<div class="flex items-center">
+                      <img alt="" src="${escape(data.image)}" width="25" height="25" style="border-radius:50%; margin-right:6px;">
+                      <span>${escape(data.text)}</span>
+                    </div>`;
+                }
+            },
             maxItems: 5,
         });
     }

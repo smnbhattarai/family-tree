@@ -5,7 +5,10 @@
 @section('main_content')
 
     <div class="row">
-        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <div id="existingMemberDiv">
+            </div>
+        </div>
 
         <div class="col-md-6">
             <h4 class="text-center mb-3">{{ __('Add Family') }}</h4>
@@ -144,4 +147,59 @@
 
     </div>
 
+@endsection
+
+@section('footerScript')
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const existingMemberDiv = document.querySelector('#existingMemberDiv');
+            document.querySelector('#first_name').addEventListener('blur', function (e) {
+                existingMemberDiv.innerHTML = '';
+                let query = this.value;
+                if (query.length > 1) {
+                    searchFamily(query);
+                }
+            });
+
+            async function searchFamily(q) {
+                try {
+                    const url = '{{ route("page.search.familyData") }}';
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                        body: JSON.stringify({q}),
+                    });
+
+                    const res = await response.json();
+                    displayFamilyDetail(res);
+                } catch (error) {
+                    console.error('Error fetching data:', error.message);
+                }
+            }
+
+            function displayFamilyDetail(res) {
+                console.log(res);
+                let output = '';
+
+                if (res && res.data.length) {
+                    output += `<div class="card mt-5">`;
+                    output += `<ul class="list-group">`;
+                    res.data.forEach(function (d) {
+                        output += `<li class="list-group-item list-group-item-light d-flex justify-content-between align-items-center">
+                            ${d.name}
+                            <span class="badge rounded-pill"><img src="${d.thumbnail}" alt="" height="40"></span>
+                        </li>`;
+                    });
+                    output += `</ul>`;
+                    output += `</div>`;
+                }
+
+                existingMemberDiv.innerHTML = output;
+            }
+        });
+    </script>
 @endsection

@@ -67,12 +67,8 @@
                         body: JSON.stringify({q}),
                     });
 
-                    if (!response.ok) {
-                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
-                    }
-
-                    const data = await response.json();
-                    displayFamilyDetail(data);
+                    const res = await response.json();
+                    displayFamilyDetail(res);
                     performMark("#personCard", "#search");
                 } catch (error) {
                     console.error('Error fetching data:', error.message);
@@ -81,9 +77,9 @@
             }
 
 
-            function displayFamilyDetail(data) {
+            function displayFamilyDetail(res) {
                 let html = '';
-                data.forEach(function (d) {
+                res.data.forEach(function (d) {
                     html += `
                     <div class="col-md-4">
                     <div class="card shadow-lg mb-3">
@@ -107,10 +103,10 @@
                 });
 
                 card.innerHTML = html;
-                if (data.length <= 1) {
-                    searchResultCount.innerText = `Showing ` + data.length + ` result ...`;
+                if (res.data.length <= 1) {
+                    searchResultCount.innerText = `Showing ` + res.data.length + ` result out of ` + res.total + ' total';
                 } else {
-                    searchResultCount.innerText = `Showing ` + data.length + ` results ...`;
+                    searchResultCount.innerText = `Showing ` + res.data.length + ` results out of ` + res.total + ' total';
                 }
             }
 

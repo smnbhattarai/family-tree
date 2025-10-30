@@ -74,6 +74,8 @@ final class PageController
 
         $q = (string) $validated['q'];
 
+        $totalMembers = Family::query()->count();
+
         $families = Family::query()
             ->where('first_name', 'LIKE', "%$q%")
             ->orWhere('middle_name', 'LIKE', "%$q%")
@@ -86,9 +88,10 @@ final class PageController
             ->get();
 
         $results = [];
+        $results['total'] = $totalMembers;
 
         foreach ($families as $family) {
-            $results[] = [
+            $results['data'][] = [
                 'id' => $family->id,
                 'name' => $family->name(),
                 'thumbnail' => $family->thumbnailPath(),

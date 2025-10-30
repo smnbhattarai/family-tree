@@ -69,7 +69,7 @@ final class Family extends Model
         $filename = end($exploded);
         $thumbFilename = "thumb-$filename";
 
-        return $exploded[0].'/thumbnail/'.$thumbFilename;
+        return asset($exploded[0].'/thumbnail/'.$thumbFilename);
     }
 
     public function avatarFilename(): string

@@ -31,23 +31,23 @@ final class FamilyController
      */
     public function create(): Factory|View
     {
-        $fathers = Family::query()->where('gender', 'M')->get(['id', 'first_name', 'middle_name', 'last_name']);
-        $mothers = Family::query()->where('gender', 'F')->get(['id', 'first_name', 'middle_name', 'last_name']);
-        $spouse = Family::query()->get(['id', 'first_name', 'middle_name', 'last_name']);
+        $fathers = Family::query()->where('gender', 'M')->get(['id', 'first_name', 'middle_name', 'last_name', 'avatar']);
+        $mothers = Family::query()->where('gender', 'F')->get(['id', 'first_name', 'middle_name', 'last_name', 'avatar']);
+        $spouse = Family::query()->get(['id', 'first_name', 'middle_name', 'last_name', 'avatar']);
 
         $f = [];
         foreach ($fathers as $father) {
-            $f[$father->id] = $father->name();
+            $f[$father->id] = ['text' => $father->name(), 'image' => $father->thumbnailPath()];
         }
 
         $m = [];
         foreach ($mothers as $mother) {
-            $m[$mother->id] = $mother->name();
+            $m[$mother->id] = ['text' =>$mother->name(), 'image' => $mother->thumbnailPath()];
         }
 
         $s = [];
         foreach ($spouse as $item) {
-            $s[$item->id] = $item->name();
+            $s[$item->id] = ['text' =>$item->name(), 'image' => $item->thumbnailPath()];
         }
 
         return view('admin.family.create', ['fathers' => $f, 'mothers' => $m, 'spouse' => $s]);
