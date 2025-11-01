@@ -42,12 +42,12 @@ final class FamilyController
 
         $m = [];
         foreach ($mothers as $mother) {
-            $m[$mother->id] = ['text' =>$mother->name(), 'image' => $mother->thumbnailPath()];
+            $m[$mother->id] = ['text' => $mother->name(), 'image' => $mother->thumbnailPath()];
         }
 
         $s = [];
         foreach ($spouse as $item) {
-            $s[$item->id] = ['text' =>$item->name(), 'image' => $item->thumbnailPath()];
+            $s[$item->id] = ['text' => $item->name(), 'image' => $item->thumbnailPath()];
         }
 
         return view('admin.family.create', ['fathers' => $f, 'mothers' => $m, 'spouse' => $s]);
@@ -109,12 +109,12 @@ final class FamilyController
 
         $m = [];
         foreach ($mothers as $mother) {
-            $m[$mother->id] = ['text' =>$mother->name(), 'image' => $mother->thumbnailPath()];
+            $m[$mother->id] = ['text' => $mother->name(), 'image' => $mother->thumbnailPath()];
         }
 
         $s = [];
         foreach ($spouse as $item) {
-            $s[$item->id] = ['text' =>$item->name(), 'image' => $item->thumbnailPath()];
+            $s[$item->id] = ['text' => $item->name(), 'image' => $item->thumbnailPath()];
         }
 
         return view('admin.family.edit', ['family' => $family, 'fathers' => $f, 'mothers' => $m, 'spouse' => $s]);
