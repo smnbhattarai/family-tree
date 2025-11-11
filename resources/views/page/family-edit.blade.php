@@ -10,7 +10,7 @@
         <div class="col-md-6">
             <h4 class="text-center mb-3">{{ __('Edit Family') }}</h4>
 
-            <form action="{{ route('admin.family.update', $family->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('page.family.update', $family->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <fieldset class="border rounded-3 p-3 mb-3">

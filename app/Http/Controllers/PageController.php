@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FamilyRequest;
 use App\Models\Family;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
 
 final class PageController
 {
@@ -136,5 +141,41 @@ final class PageController
         }
 
         return view('page.family-edit', ['family' => $family, 'fathers' => $f, 'mothers' => $m, 'spouse' => $s]);
+    }
+
+    public function updateFamily(Family $family, FamilyRequest $request): RedirectResponse
+    {
+        if (auth()->user()->cannot('update', $family)) {
+            abort(403);
+        }
+
+        $data = $request->validated();
+        $fName = $data['first_name'];
+
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+
+            // process original image
+            $filename = Str::slug($fName).'-'.Str::random(8);
+            $thumbImage = Image::read($file)->scaleDown(300, 300);
+
+            $file->move(public_path('avatar'), $filename.'.'.$file->getClientOriginalExtension());
+            $data['avatar'] = 'avatar/'.$filename.'.'.$file->getClientOriginalExtension();
+
+            // process thumbnail
+            $thumbFilename = 'thumb-'.$filename.'.'.$file->getClientOriginalExtension();
+            Storage::disk('public_avatar')->put("thumbnail/$thumbFilename", $thumbImage->encodeByExtension($file->getClientOriginalExtension(), quality: 90));
+
+            // Delete old avatar file
+            $this->deleteAvatar($family);
+        }
+
+        if ($request->filled('spouse')) {
+            $data['spouse'] = json_encode($request->input('spouse'));
+        }
+
+        $family->update($data);
+
+        return redirect()->route('page.family.show', $family->id)->with('success', 'Member updated successfully!');
     }
 }

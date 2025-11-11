@@ -53,7 +53,7 @@ final class FamilyPolicy
      */
     public function update(User $user, Family $family): bool
     {
-        // Logged-in user can edit their own, parents, children and spouse details
+        // Logged-in user can edit their own, parents, sibling, children and spouse details
         $loggedFamily = Family::query()->where('email', $user->email)->first();
         if ($loggedFamily) {
             $familyIds = [];
@@ -61,8 +61,13 @@ final class FamilyPolicy
             $familyIds[] = $loggedFamily->father_id;
             $familyIds[] = $loggedFamily->mother_id;
             $familyIds[] = $loggedFamily->spouse;
+
             if ($children = Family::query()->where('father_id', $loggedFamily->id)->orWhere('mother_id', $loggedFamily->id)->get(['id'])) {
                 $familyIds[] = $children->pluck(['id'])->all();
+            }
+
+            if ($sibling = Family::query()->where('father_id', $family->father_id)->orWhere('mother_id', $family->mother_id)->get(['id'])) {
+                $familyIds[] = $sibling->pluck(['id'])->all();
             }
 
             $familyIds = Arr::whereNotNull(Arr::flatten($familyIds));
