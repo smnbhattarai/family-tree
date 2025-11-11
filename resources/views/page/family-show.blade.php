@@ -124,6 +124,10 @@
                         <a class="btn btn-info btn-sm" href="{{ route('page.search.family') }}">{{ __('Back') }}</a>
                         @if(auth()->user()->isAdmin())
                         <a class="btn btn-primary btn-sm" href="{{ route('admin.family.edit', $family) }}">{{ __('Edit') }}</a>
+                        @else
+                            @can('update', $family)
+                                <a class="btn btn-primary btn-sm" href="{{ route('page.family.edit', $family) }}">{{ __('Edit') }}</a>
+                            @endcan
                         @endif
                     </p>
 

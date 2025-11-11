@@ -109,4 +109,32 @@ final class PageController
     {
         return view('page.family-show', ['family' => $family]);
     }
+
+    public function editFamily(Family $family): Factory|View
+    {
+        if (auth()->user()->cannot('update', $family)) {
+            abort(403);
+        }
+
+        $fathers = Family::query()->where('gender', 'M')->get(['id', 'first_name', 'middle_name', 'last_name', 'avatar']);
+        $mothers = Family::query()->where('gender', 'F')->get(['id', 'first_name', 'middle_name', 'last_name', 'avatar']);
+        $spouse = Family::query()->get(['id', 'first_name', 'middle_name', 'last_name', 'avatar']);
+
+        $f = [];
+        foreach ($fathers as $father) {
+            $f[$father->id] = ['text' => $father->name(), 'image' => $father->thumbnailPath()];
+        }
+
+        $m = [];
+        foreach ($mothers as $mother) {
+            $m[$mother->id] = ['text' => $mother->name(), 'image' => $mother->thumbnailPath()];
+        }
+
+        $s = [];
+        foreach ($spouse as $item) {
+            $s[$item->id] = ['text' => $item->name(), 'image' => $item->thumbnailPath()];
+        }
+
+        return view('page.family-edit', ['family' => $family, 'fathers' => $f, 'mothers' => $m, 'spouse' => $s]);
+    }
 }
