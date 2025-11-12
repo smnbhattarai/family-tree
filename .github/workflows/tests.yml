@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -62,5 +64,16 @@ jobs:
           restore-keys: ${{ runner.os }}-phpstan-
       - run: mkdir -p /tmp/phpstan
 
+      - name: Run Lint
+        run: composer lint
+
       - name: Tests
         run: composer test
+
+      - name: Push changes back to repo
+        run: |
+          git config user.name "ghActions"
+          git config user.email "gha@familytree.test"
+          git add .
+          git commit -m "Composer Lint"
+          git push
