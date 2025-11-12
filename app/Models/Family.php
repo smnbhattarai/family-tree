@@ -14,6 +14,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property-read string $spouse
+ */
 #[ObservedBy(FamilyObserver::class)]
 final class Family extends Model
 {

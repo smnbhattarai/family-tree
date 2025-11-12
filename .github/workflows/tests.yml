@@ -1,4 +1,4 @@
-name: tests
+name: Lint and Tests
 
 on:
   push:
@@ -12,6 +12,11 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+    env:
+      PHP_VERSION: '8.4'
+      PHP_EXTENSIONS: dom, curl, libxml, mbstring, zip, pcntl, pdo, gd, redis,igbinary, msgpack, lzf, zstd, lz4, memcached, gmp, :php-psr
+      EXTENSION_CACHE_KEY: extension-cache-v1
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,7 +26,8 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: ${{ env.PHP_EXTENSIONS }}
           tools: composer:v2
           coverage: xdebug
 
@@ -39,8 +45,19 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Get composer cache dir
+        id: composer-cache-dir
+        run: echo dir=$(composer config cache-files-dir) >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4.3.0
+        with:
+          key: composer-cache-${{ hashFiles('**/composer.lock') }}
+          path: ${{ steps.composer-cache-dir.outputs.dir }}
+          restore-keys: composer-cache-
+
       - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        run: composer install --quiet --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Copy Environment File
         run: cp .env.example .env
@@ -75,5 +92,5 @@ jobs:
           git config user.name "ghActions"
           git config user.email "gha@familytree.test"
           git add .
-          git commit -m "Composer Lint"
+          git commit -m "Composer Lint" || exit 0
           git push

@@ -178,4 +178,10 @@ final class PageController
 
         return redirect()->route('page.family.show', $family->id)->with('success', 'Member updated successfully!');
     }
+
+    private function deleteAvatar(Family $family): void
+    {
+        Storage::disk('public_avatar')->delete($family->avatarFilename());
+        Storage::disk('public_avatar')->delete($family->avatarThumbnailFilename());
+    }
 }
