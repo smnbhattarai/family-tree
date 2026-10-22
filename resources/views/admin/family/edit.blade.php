@@ -11,7 +11,7 @@
             <div class="ft-page-header">
                 <span class="ft-eyebrow">{{ __('Family Record') }}</span>
                 <h2>{{ __('Edit Family') }}</h2>
-                <p>{{ __('Update this member's details and relationships.') }}</p>
+                <p>{{ __('Update this member\'s details and relationships.') }}</p>
             </div>
 
             <form action="{{ route('admin.family.update', $family->id) }}" method="POST" enctype="multipart/form-data">
