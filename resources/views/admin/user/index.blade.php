@@ -4,11 +4,15 @@
 
 @section('main_content')
 
-    <div class="row">
-        <div class="col-md-12"></div>
+    <div class="mb-4">
+        <span class="ft-eyebrow">{{ __('Administration') }}</span>
+        <h2 class="mb-0">{{ __('Users') }}</h2>
+    </div>
 
+    <div class="row">
         <div class="col-md-12">
-            <table class="table table-hover table-sm" id="userTable">
+            <div class="ft-surface">
+            <table class="table table-hover" id="userTable">
                 <thead>
                 <tr>
                     <th scope="col">{{ __('ID') }}</th>
@@ -24,12 +28,13 @@
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ ucfirst($user->role) }}</td>
+                        <td><span class="badge rounded-pill text-bg-light border">{{ ucfirst($user->role) }}</span></td>
                         <td>{{ $user->created_at->diffForHumans() }}</td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
+            </div>
 
         </div>
     </div>

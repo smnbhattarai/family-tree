@@ -4,36 +4,31 @@
 
 @section('main_content')
 
-    <div class="row">
-        <div class="col-md-4"></div>
+    <div class="card ft-auth-card">
 
-        <div class="col-md-4">
+        <form method="POST" action="{{ route('login') }}">
 
-            <form class="mt-5" method="POST" action="{{ route('login') }}">
+            @csrf
 
-                @csrf
+            <img class="ft-auth-logo" src="{{ config('app.url') . '/assets/images/logo.svg' }}"
+                 alt="{{ config('app.name') }}">
 
-                <img class="mb-4" src="{{ config('app.url') . '/assets/images/logo.svg' }}"
-                     alt="{{ config('app.name') }}" width="72" height="57">
+            <h1 class="h3 mb-1">{{ __('Please sign in') }}</h1>
+            <p class="text-body-secondary mb-4">{{ __('We will email you a secure link to sign in.') }}</p>
 
-                <h1 class="h3 mb-3 fw-normal">{{ __('Please sign in') }}</h1>
+            <div class="form-floating text-start">
+                <input type="email" value="{{ old('email') }}"
+                       class="form-control @error('email') is-invalid @enderror" id="email" name="email"
+                       placeholder="name@example.com">
+                <label for="email">{{ __('Email address') }}</label>
+                @error('email')
+                <div class="invalid-feedback">{{ $errors->first('email') }}</div>@enderror
+            </div>
 
-                <div class="form-floating">
-                    <input type="email" value="{{ old('email') }}"
-                           class="form-control @error('email') is-invalid @enderror" id="email" name="email"
-                           placeholder="name@example.com">
-                    <label for="email">{{ __('Email address') }}</label>
-                    @error('email')
-                    <div class="invalid-feedback">{{ $errors->first('email') }}</div>@enderror
-                </div>
+            <button class="btn btn-primary btn-lg w-100 mt-4" type="submit">{{ __('Sign in') }}</button>
 
-                <button class="btn btn-primary w-100 py-2 my-3" type="submit">{{ __('Sign in') }}</button>
+        </form>
 
-            </form>
-
-        </div>
-
-        <div class="col-md-4"></div>
     </div>
 
 @endsection

@@ -5,19 +5,23 @@
 @section('main_content')
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-lg-4 col-xl-3 order-last order-lg-first">
             <div id="existingMemberDiv">
             </div>
         </div>
 
-        <div class="col-md-6">
-            <h4 class="text-center mb-3">{{ __('Add Family') }}</h4>
+        <div class="col-lg-8 col-xl-6">
+            <div class="ft-page-header">
+                <span class="ft-eyebrow">{{ __('Family Record') }}</span>
+                <h2>{{ __('Add Family') }}</h2>
+                <p>{{ __('Add a new member and connect them to their relatives.') }}</p>
+            </div>
 
             <form action="{{ route('admin.family.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <fieldset class="border rounded-3 p-3 mb-3">
-                    <legend class="float-none w-auto px-3">{{ __('Personal Detail') }}</legend>
+                <fieldset class="ft-fieldset">
+                    <legend class="float-none w-auto px-3"><i class="bi bi-person-vcard"></i> {{ __('Personal Detail') }}</legend>
                     <div class="row">
                         <div class="col">
                             @include('partials.form.text_input', [
@@ -62,7 +66,7 @@
                             ])
                         </div>
                         <div class="col text-center">
-                            <img class="text-right" src="" alt="Avatar" width="70" height="70">
+                            <img class="ft-avatar-preview" id="avatarPreview" src="{{ config('app.url') . '/assets/images/avatar.png' }}" alt="Avatar" width="70" height="70">
                         </div>
                         <div class="col">
                             @include('partials.form.file_input', [
@@ -74,8 +78,8 @@
                     </div>
                 </fieldset>
 
-                <fieldset class="border rounded-3 p-3 mb-3">
-                    <legend class="float-none w-auto px-3">{{ __('Contact Detail') }}</legend>
+                <fieldset class="ft-fieldset">
+                    <legend class="float-none w-auto px-3"><i class="bi bi-telephone"></i> {{ __('Contact Detail') }}</legend>
                     <div class="row">
                         <div class="col">
                             @include('partials.form.text_input', [
@@ -104,8 +108,8 @@
                     </div>
                 </fieldset>
 
-                <fieldset class="border rounded-3 p-3 mb-3">
-                    <legend class="float-none w-auto px-3">{{ __('Family Detail') }}</legend>
+                <fieldset class="ft-fieldset">
+                    <legend class="float-none w-auto px-3"><i class="bi bi-people"></i> {{ __('Family Detail') }}</legend>
                     <div class="row">
                         <div class="col">
                             @include('partials.form.select_input', [
@@ -138,12 +142,14 @@
                     </div>
                 </fieldset>
 
-                <button class="btn btn-primary mt-4" type="submit">{{ __('Add Family') }}</button>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary btn-lg" type="submit"><i class="bi bi-check2-circle me-1"></i> {{ __('Add Family') }}</button>
+                </div>
 
             </form>
         </div>
 
-        <div class="col-md-3"></div>
+        <div class="d-none d-xl-block col-xl-3"></div>
 
     </div>
 
@@ -153,6 +159,11 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const existingMemberDiv = document.querySelector('#existingMemberDiv');
+            document.querySelector('#avatar').addEventListener('change', function () {
+                if (this.files && this.files[0]) {
+                    document.querySelector('#avatarPreview').src = URL.createObjectURL(this.files[0]);
+                }
+            });
             document.querySelector('#first_name').addEventListener('blur', function (e) {
                 existingMemberDiv.innerHTML = '';
                 let query = this.value;
@@ -182,16 +193,16 @@
             }
 
             function displayFamilyDetail(res) {
-                console.log(res);
                 let output = '';
 
                 if (res && res.data.length) {
-                    output += `<div class="card mt-5">`;
-                    output += `<ul class="list-group">`;
+                    output += `<div class="card mt-5 mt-lg-0">`;
+                    output += `<div class="card-header bg-transparent fw-bold"><i class="bi bi-info-circle me-1"></i> {{ __('Existing members with this name') }}</div>`;
+                    output += `<ul class="list-group list-group-flush">`;
                     res.data.forEach(function (d) {
-                        output += `<li class="list-group-item list-group-item-light d-flex justify-content-between align-items-center">
+                        output += `<li class="list-group-item d-flex justify-content-between align-items-center">
                             ${d.name}
-                            <span class="badge rounded-pill"><img src="${d.thumbnail}" alt="" height="40"></span>
+                            <img src="${d.thumbnail}" alt="" class="ft-thumb m-0">
                         </li>`;
                     });
                     output += `</ul>`;

@@ -5,16 +5,20 @@
 @section('main_content')
 
     <div class="row">
-        <div class="col-md-3"></div>
+        <div class="col-lg-2 col-xl-3"></div>
 
-        <div class="col-md-6">
-            <h4 class="text-center mb-3">{{ __('Edit Family') }}</h4>
+        <div class="col-lg-8 col-xl-6">
+            <div class="ft-page-header">
+                <span class="ft-eyebrow">{{ __('Family Record') }}</span>
+                <h2>{{ __('Edit Family') }}</h2>
+                <p>{{ __('Keep your details up to date for the whole family.') }}</p>
+            </div>
 
             <form action="{{ route('page.family.update', $family->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <fieldset class="border rounded-3 p-3 mb-3">
-                    <legend class="float-none w-auto px-3">{{ __('Personal Detail') }}</legend>
+                <fieldset class="ft-fieldset">
+                    <legend class="float-none w-auto px-3"><i class="bi bi-person-vcard"></i> {{ __('Personal Detail') }}</legend>
                     <div class="row">
                         <div class="col">
                             @include('partials.form.text_input', [
@@ -65,7 +69,7 @@
                         </div>
                         <div class="col text-center">
                             @if($family->avatar)
-                                <img class="text-right" src="{{ asset($family->thumbnailPath()) }}" alt="Avatar" width="70" height="70">
+                                <img class="ft-avatar-preview" src="{{ asset($family->thumbnailPath()) }}" alt="Avatar" width="70" height="70">
                             @endif
                         </div>
                         <div class="col">
@@ -78,8 +82,8 @@
                     </div>
                 </fieldset>
 
-                <fieldset class="border rounded-3 p-3 mb-3">
-                    <legend class="float-none w-auto px-3">{{ __('Contact Detail') }}</legend>
+                <fieldset class="ft-fieldset">
+                    <legend class="float-none w-auto px-3"><i class="bi bi-telephone"></i> {{ __('Contact Detail') }}</legend>
                     <div class="row">
                         <div class="col">
                             @include('partials.form.text_input', [
@@ -111,8 +115,8 @@
                     </div>
                 </fieldset>
 
-                <fieldset class="border rounded-3 p-3 mb-3">
-                    <legend class="float-none w-auto px-3">{{ __('Family Detail') }}</legend>
+                <fieldset class="ft-fieldset">
+                    <legend class="float-none w-auto px-3"><i class="bi bi-people"></i> {{ __('Family Detail') }}</legend>
                     <div class="row">
                         <div class="col">
                             @include('partials.form.select_input', [
@@ -148,12 +152,14 @@
                     </div>
                 </fieldset>
 
-                <button class="btn btn-primary mt-4" type="submit">{{ __('Update Family') }}</button>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary btn-lg" type="submit"><i class="bi bi-check2-circle me-1"></i> {{ __('Update Family') }}</button>
+                </div>
 
             </form>
         </div>
 
-        <div class="col-md-3"></div>
+        <div class="col-lg-2 col-xl-3"></div>
 
     </div>
 

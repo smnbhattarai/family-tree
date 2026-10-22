@@ -1,0 +1,86 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Models\Family;
+use App\Models\User;
+
+it('renders the themed home page for guests', function (): void {
+    $this->get(route('home'))
+        ->assertSuccessful()
+        ->assertSee('ft-navbar', false)
+        ->assertSee('ft-footer', false)
+        ->assertSee(__('Sign in to explore'))
+        ->assertDontSee(__('Explore the tree'));
+});
+
+it('renders the themed home page for members', function (): void {
+    $user = User::factory()->create(['role' => 'user']);
+
+    $this->actingAs($user)
+        ->get(route('home'))
+        ->assertSuccessful()
+        ->assertSee($user->name)
+        ->assertSee(__('Explore the tree'))
+        ->assertDontSee(__('Sign in to explore'));
+});
+
+it('renders the sign in card', function (): void {
+    $this->get(route('page.sign.in'))
+        ->assertSuccessful()
+        ->assertSee('ft-auth-card', false)
+        ->assertSee(__('Please sign in'));
+});
+
+it('renders the search page', function (): void {
+    $this->actingAs(User::factory()->create(['role' => 'user']))
+        ->get(route('page.search.family'))
+        ->assertSuccessful()
+        ->assertSee('ft-search', false)
+        ->assertSee(__('Find a family member'));
+});
+
+it('renders the family chart inside a full width container', function (): void {
+    Family::factory()->create();
+
+    $this->actingAs(User::factory()->create(['role' => 'user']))
+        ->get(route('page.family'))
+        ->assertSuccessful()
+        ->assertSee('ft-chart-shell', false)
+        ->assertSee('container-fluid', false);
+});
+
+it('renders a profile with relative chips', function (): void {
+    $father = Family::factory()->create(['gender' => 'M']);
+    $child = Family::factory()->create(['father_id' => $father->id, 'avatar' => null]);
+
+    $this->actingAs(User::factory()->create(['role' => 'user']))
+        ->get(route('page.family.show', $child))
+        ->assertSuccessful()
+        ->assertSee('ft-profile-initial', false)
+        ->assertSee('ft-relative-chip', false)
+        ->assertSee($father->name());
+});
+
+it('renders the admin family list and user list', function (): void {
+    Family::factory()->create();
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $this->actingAs($admin)
+        ->get(route('admin.family.index'))
+        ->assertSuccessful()
+        ->assertSee(__('Family Members'));
+
+    $this->actingAs($admin)
+        ->get(route('admin.page.users'))
+        ->assertSuccessful()
+        ->assertSee('ft-surface', false);
+});
+
+it('renders the admin create form with themed fieldsets', function (): void {
+    $this->actingAs(User::factory()->create(['role' => 'admin']))
+        ->get(route('admin.family.create'))
+        ->assertSuccessful()
+        ->assertSee('ft-fieldset', false)
+        ->assertSee('avatarPreview', false);
+});

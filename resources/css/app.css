@@ -2,6 +2,7 @@
 @import "./family-chart.css";
 @import "bootstrap-icons";
 @import "tom-select/dist/css/tom-select.bootstrap5.css";
+@import "./theme.css";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -14,25 +15,4 @@
         "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
-}
-
-#FamilyChart path.link {
-    stroke: #000;
-}
-
-.btn-male {
-    color: #0d6dfd;
-}
-
-.btn-female {
-    color: #ee3e80;
-}
-
-legend {
-    font-size: 1.1rem;
-}
-
-mark {
-    padding: 0;
-    background-color: #ff0;
 }
