@@ -131,7 +131,7 @@
                         <tr>
                             <th scope="row">{{ __('Sibling(s)') }}</th>
                             <td>
-                                @if($siblings = $family->siblings())
+                                @if(($siblings = $family->siblings())->isNotEmpty())
                                     <div class="ft-relatives">
                                         @foreach($siblings as $sibling)
                                             @include('partials.relative_chip', ['relative' => $sibling, 'route' => 'page.family.show'])

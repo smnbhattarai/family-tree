@@ -122,6 +122,17 @@ it('renders a profile with relative chips', function (): void {
         ->assertSee($father->name());
 });
 
+it('shows half siblings on a profile when only one parent is known', function (): void {
+    $father = Family::factory()->create(['gender' => 'M']);
+    $member = Family::factory()->create(['father_id' => $father->id, 'mother_id' => null]);
+    $sibling = Family::factory()->create(['father_id' => $father->id, 'mother_id' => null]);
+
+    $this->actingAs(User::factory()->create(['role' => 'user']))
+        ->get(route('page.family.show', $member))
+        ->assertSuccessful()
+        ->assertSee($sibling->name());
+});
+
 it('renders the admin family list and user list', function (): void {
     Family::factory()->create();
     $admin = User::factory()->create(['role' => 'admin']);

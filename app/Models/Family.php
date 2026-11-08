@@ -101,18 +101,23 @@ final class Family extends Model
         return 'thumbnail/'.$thumbFilename;
     }
 
-    public function siblings(): ?Collection
+    /**
+     * Members sharing at least one known parent, including half-siblings.
+     *
+     * @return Collection<int, Family>
+     */
+    public function siblings(): Collection
     {
-        if (! $this->father_id || ! $this->mother_id) {
-            return null;
+        if (! $this->father_id && ! $this->mother_id) {
+            return new Collection;
         }
 
         return self::query()
             ->where(function ($query): void {
-                $query->where('father_id', $this->father_id);
-                $query->orWhere('mother_id', $this->mother_id);
+                $query->when($this->father_id, fn ($query) => $query->orWhere('father_id', $this->father_id));
+                $query->when($this->mother_id, fn ($query) => $query->orWhere('mother_id', $this->mother_id));
             })
-            ->where('id', '!=', $this->id)
+            ->whereKeyNot($this->id)
             ->get();
     }
 
