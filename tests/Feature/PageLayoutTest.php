@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Family;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 it('renders the themed home page for guests', function (): void {
     $this->get(route('home'))
@@ -76,6 +77,37 @@ it('centres the tree on the signed in member', function (): void {
         ->get(route('page.family'))
         ->assertSuccessful()
         ->assertViewHas('mainId', $member->id);
+});
+
+it('lists each member\'s children in the tree data', function (): void {
+    $father = Family::factory()->create(['gender' => 'M']);
+    $mother = Family::factory()->create(['gender' => 'F']);
+    $fullChild = Family::factory()->create(['father_id' => $father->id, 'mother_id' => $mother->id]);
+    $halfChild = Family::factory()->create(['father_id' => $father->id, 'mother_id' => null]);
+    $loner = Family::factory()->create(['father_id' => null, 'mother_id' => null]);
+
+    $response = $this->actingAs(User::factory()->create(['role' => 'user']))
+        ->get(route('page.family'))
+        ->assertSuccessful();
+
+    $children = collect(json_decode((string) $response->viewData('data'), true))
+        ->mapWithKeys(fn (array $node): array => [$node['id'] => $node['rels']['children']]);
+
+    expect($children[$father->id])->toEqualCanonicalizing([$fullChild->id, $halfChild->id])
+        ->and($children[$mother->id])->toBe([$fullChild->id])
+        ->and($children[$loner->id])->toBe([]);
+});
+
+it('builds the tree without a query per member', function (): void {
+    $father = Family::factory()->create(['gender' => 'M']);
+    Family::factory()->count(10)->create(['father_id' => $father->id]);
+    $user = User::factory()->create(['role' => 'user']);
+
+    DB::enableQueryLog();
+
+    $this->actingAs($user)->get(route('page.family'))->assertSuccessful();
+
+    expect(DB::getQueryLog())->toHaveCount(3);
 });
 
 it('renders a profile with relative chips', function (): void {

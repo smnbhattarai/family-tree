@@ -101,11 +101,6 @@ final class Family extends Model
         return 'thumbnail/'.$thumbFilename;
     }
 
-    public function getChildrensId(): array
-    {
-        return self::query()->where('father_id', $this->id)->orWhere('mother_id', $this->id)->pluck('id')->toArray();
-    }
-
     public function siblings(): ?Collection
     {
         if (! $this->father_id || ! $this->mother_id) {

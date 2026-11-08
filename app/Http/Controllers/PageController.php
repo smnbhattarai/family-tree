@@ -34,6 +34,14 @@ final class PageController
         $mainPerson = $families->firstWhere('email', auth()->user()->email) ?? $families->random();
         $mainId = (int) $mainPerson->id;
 
+        $childrenIdsByParent = [];
+
+        foreach ($families as $family) {
+            foreach (array_unique(array_filter([$family->father_id, $family->mother_id])) as $parentId) {
+                $childrenIdsByParent[(int) $parentId][] = (int) $family->id;
+            }
+        }
+
         $data = [];
 
         foreach ($families as $family) {
@@ -51,7 +59,7 @@ final class PageController
                     'father' => $family->father_id ? (int) $family->father_id : null,
                     'mother' => $family->mother_id ? (int) $family->mother_id : null,
                     'spouses' => $family->spouse,
-                    'children' => $family->getChildrensId(),
+                    'children' => $childrenIdsByParent[(int) $family->id] ?? [],
                 ],
                 'main' => false,
             ];
