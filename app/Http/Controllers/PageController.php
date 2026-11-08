@@ -175,9 +175,7 @@ final class PageController
             $this->deleteAvatar($family);
         }
 
-        if ($request->filled('spouse')) {
-            $data['spouse'] = json_encode($request->input('spouse'));
-        }
+        $data['spouse'] = json_encode(array_values(array_map('intval', (array) $request->input('spouse', []))));
 
         $family->update($data);
 

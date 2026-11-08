@@ -19,7 +19,7 @@ final class FamilyObserver
     public function created(Family $family): void
     {
         $this->updateUser($family);
-        $this->updateSpouse($family);
+        $this->updateSpouse($family, []);
         $this->deleteCache();
     }
 
@@ -29,7 +29,11 @@ final class FamilyObserver
     public function updated(Family $family): void
     {
         $this->updateUser($family);
-        $this->updateSpouse($family);
+
+        if ($family->wasChanged('spouse')) {
+            $this->updateSpouse($family, $this->decodeSpouseIds($family->getRawOriginal('spouse')));
+        }
+
         $this->deleteCache();
     }
 
@@ -86,19 +90,39 @@ final class FamilyObserver
         User::query()->where('email', $email)->delete();
     }
 
-    private function updateSpouse(Family $family): void
+    /**
+     * Keep the spouse relation symmetric: link newly added spouses back and unlink removed ones.
+     *
+     * @param  list<int>  $previousSpouseIds
+     */
+    private function updateSpouse(Family $family, array $previousSpouseIds): void
     {
-        // When spouse is added to a family member, assign reverse relation as well
-        $spouseIds = (array) $family->spouse;
-        if ($spouseIds !== []) {
-            $spouses = Family::query()->findMany($spouseIds);
-            foreach ($spouses as $spouse) {
-                $spouseData = (array) $spouse->spouse;
-                $spouseData[] = $family->id;
-                $spouseData = array_unique($spouseData);
-                DB::table('families')->where('id', $spouse->id)->update(['spouse' => json_encode($spouseData)]);
-            }
-        }
+        $familyId = (int) $family->id;
+        $currentSpouseIds = array_values(array_diff((array) $family->spouse, [$familyId]));
+        $removedSpouseIds = array_diff($previousSpouseIds, $currentSpouseIds);
+
+        Family::query()->findMany([...$currentSpouseIds, ...$removedSpouseIds])
+            ->each(function (Family $spouse) use ($familyId, $currentSpouseIds): void {
+                $spouseIds = array_diff((array) $spouse->spouse, [$familyId]);
+
+                if (in_array((int) $spouse->id, $currentSpouseIds, true)) {
+                    $spouseIds[] = $familyId;
+                }
+
+                DB::table('families')->where('id', $spouse->id)->update([
+                    'spouse' => json_encode(array_values(array_unique($spouseIds))),
+                ]);
+            });
+    }
+
+    /**
+     * @return list<int>
+     */
+    private function decodeSpouseIds(?string $json): array
+    {
+        $decoded = $json === null || $json === '' ? [] : json_decode($json, true);
+
+        return is_array($decoded) ? array_values(array_map('intval', $decoded)) : [];
     }
 
     /**
