@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FamilyRequest;
+use App\Http\Requests\RelationshipRequest;
 use App\Models\Family;
+use App\Services\RelationshipFinder;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -118,6 +120,28 @@ final class PageController
     public function showFamily(Family $family): Factory|View
     {
         return view('page.family-show', ['family' => $family]);
+    }
+
+    public function relationship(RelationshipRequest $request, RelationshipFinder $finder): View
+    {
+        $members = [];
+
+        foreach (Family::query()->orderBy('first_name')->orderBy('last_name')->get(['id', 'first_name', 'middle_name', 'last_name', 'avatar']) as $member) {
+            $members[$member->id] = ['text' => $member->name(), 'image' => $member->thumbnailPath()];
+        }
+
+        $subject = $request->filled('from')
+            ? Family::query()->find($request->integer('from'))
+            : Family::query()->where('email', auth()->user()->email)->first();
+
+        $relative = $request->filled('to') ? Family::query()->find($request->integer('to')) : null;
+
+        return view('page.relationship', [
+            'members' => $members,
+            'subject' => $subject,
+            'relative' => $relative,
+            'result' => $subject && $relative ? $finder->find($subject, $relative) : null,
+        ]);
     }
 
     public function editFamily(Family $family): Factory|View
