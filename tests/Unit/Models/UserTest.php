@@ -13,6 +13,7 @@ test('to array', function () {
             'name',
             'email',
             'email_verified_at',
+            'role',
             'created_at',
             'updated_at',
         ]);

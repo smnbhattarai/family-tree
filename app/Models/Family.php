@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property-read string $spouse
+ * @property-read list<int> $spouse
  */
 #[ObservedBy(FamilyObserver::class)]
 final class Family extends Model
@@ -124,7 +124,7 @@ final class Family extends Model
     /**
      * Get the spouse.
      */
-    protected function spouse(): Attribute
+    public function spouse(): Attribute
     {
         return Attribute::make(
 
