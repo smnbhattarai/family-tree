@@ -27,18 +27,12 @@ final class PageController
     {
         $families = Cache::remember('family.all', 24 * 60 * 60, fn () => Family::with('father', 'mother')->get());
 
-        $mainPerson = null;
-
-        if (auth()->user()) {
-            $mainPerson = Family::query()->where('email', auth()->user()->email)->first();
+        if ($families->isEmpty()) {
+            return view('page.family', ['data' => '[]', 'mainId' => null]);
         }
 
-        if ($mainPerson) {
-            $mainId = $mainPerson->id;
-        } else {
-            $randomPerson = Family::query()->inRandomOrder()->first();
-            $mainId = $randomPerson->id;
-        }
+        $mainPerson = $families->firstWhere('email', auth()->user()->email) ?? $families->random();
+        $mainId = (int) $mainPerson->id;
 
         $data = [];
 

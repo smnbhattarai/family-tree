@@ -50,6 +50,34 @@ it('renders the family chart inside a full width container', function (): void {
         ->assertSee('container-fluid', false);
 });
 
+it('renders an empty state instead of crashing when there are no family members', function (): void {
+    $this->actingAs(User::factory()->create(['role' => 'user']))
+        ->get(route('page.family'))
+        ->assertSuccessful()
+        ->assertSee('ft-empty', false)
+        ->assertSee(__('No family members have been added yet.'))
+        ->assertDontSee('updateMainId', false)
+        ->assertDontSee(route('admin.family.create'), false);
+});
+
+it('links admins to add the first member when the tree is empty', function (): void {
+    $this->actingAs(User::factory()->create(['role' => 'admin']))
+        ->get(route('page.family'))
+        ->assertSuccessful()
+        ->assertSee(route('admin.family.create'), false);
+});
+
+it('centres the tree on the signed in member', function (): void {
+    Family::factory()->count(3)->create();
+    $member = Family::factory()->create(['email' => 'me@example.com']);
+    $user = User::query()->where('email', 'me@example.com')->firstOrFail();
+
+    $this->actingAs($user)
+        ->get(route('page.family'))
+        ->assertSuccessful()
+        ->assertViewHas('mainId', $member->id);
+});
+
 it('renders a profile with relative chips', function (): void {
     $father = Family::factory()->create(['gender' => 'M']);
     $child = Family::factory()->create(['father_id' => $father->id, 'avatar' => null]);

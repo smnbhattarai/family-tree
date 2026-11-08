@@ -7,13 +7,26 @@
 
 @section('main_content')
 
-    <div class="ft-chart-shell">
-        <div id="FamilyChart" class="f3" style="width:100%;height:500px;"></div>
-    </div>
+    @if($mainId === null)
+        <div class="container py-5">
+            <div class="ft-empty">
+                <i class="bi bi-tree"></i>
+                <p class="mt-2">{{ __('No family members have been added yet.') }}</p>
+                @if(auth()->user()->isAdmin())
+                    <a href="{{ route('admin.family.create') }}" class="btn btn-primary"><i class="bi bi-person-plus me-1"></i> {{ __('Add the first member') }}</a>
+                @endif
+            </div>
+        </div>
+    @else
+        <div class="ft-chart-shell">
+            <div id="FamilyChart" class="f3" style="width:100%;height:500px;"></div>
+        </div>
+    @endif
 
 @endsection
 
 @section('footerScript')
+    @if($mainId !== null)
     <script>
 
         const data = {!! $data !!}
@@ -110,4 +123,5 @@
         });
 
     </script>
+    @endif
 @endsection
