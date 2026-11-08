@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FamilyRequest;
 use App\Http\Requests\RelationshipRequest;
 use App\Models\Family;
+use App\Services\BirthdayCalendar;
 use App\Services\RelationshipFinder;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -20,9 +21,18 @@ use Intervention\Image\Laravel\Facades\Image;
 
 final class PageController
 {
-    public function home(): Factory|View
+    public function home(BirthdayCalendar $calendar): Factory|View
     {
-        return view('home');
+        return view('home', [
+            'birthdays' => auth()->check() ? $calendar->upcoming(30)->take(6) : collect(),
+        ]);
+    }
+
+    public function birthdays(BirthdayCalendar $calendar): View
+    {
+        return view('page.birthdays', [
+            'birthdaysByMonth' => $calendar->upcoming(365)->groupBy(fn (array $birthday): string => $birthday['date']->format('F Y')),
+        ]);
     }
 
     public function family(): View

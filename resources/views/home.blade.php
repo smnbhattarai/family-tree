@@ -68,4 +68,24 @@
 
     </section>
 
+    @auth
+        <section class="card ft-birthdays-card mt-5">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <h2 class="h5 mb-0"><i class="bi bi-cake2 me-1"></i> {{ __('Birthdays in the next 30 days') }}</h2>
+                    <a href="{{ route('page.birthdays') }}" class="btn btn-outline-secondary btn-sm">{{ __('All birthdays') }} <i class="bi bi-arrow-right"></i></a>
+                </div>
+                @if($birthdays->isEmpty())
+                    <p class="text-body-secondary mb-0">{{ __('No birthdays coming up in the next 30 days.') }}</p>
+                @else
+                    <ul class="ft-birthdays">
+                        @foreach($birthdays as $birthday)
+                            @include('partials.birthday_item', ['birthday' => $birthday])
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+        </section>
+    @endauth
+
 @endsection

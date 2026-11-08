@@ -57,7 +57,15 @@
                         </tr>
                         <tr>
                             <th scope="row">{{ __('Date of Birth') }}</th>
-                            <td>{{ $family->dob }}</td>
+                            <td>
+                                {{ $family->dob }}
+                                @if(($age = $family->age()) !== null)
+                                    <span class="text-body-secondary ms-1">({{ trans_choice(':count year old|:count years old', $age) }})</span>
+                                    @if($family->nextBirthday()?->isToday())
+                                        <span class="badge rounded-pill text-bg-warning ms-1"><i class="bi bi-cake2"></i> {{ __('Birthday today!') }}</span>
+                                    @endif
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">{{ __('Gender') }}</th>

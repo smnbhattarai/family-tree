@@ -24,6 +24,10 @@
                            href="{{ route('page.relationship') }}"><i class="bi bi-diagram-2"></i> {{ __('Relationship') }}</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('page.birthdays') ? 'active' : '' }}"
+                           href="{{ route('page.birthdays') }}"><i class="bi bi-cake2"></i> {{ __('Birthdays') }}</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('page.search.family') ? 'active' : '' }}"
                            href="{{ route('page.search.family') }}"><i class="bi bi-search"></i> {{ __('Search') }}</a>
                     </li>

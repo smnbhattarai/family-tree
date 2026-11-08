@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Observers\FamilyObserver;
+use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
+use Carbon\Exceptions\InvalidFormatException;
 use Database\Factories\FamilyFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -102,6 +105,55 @@ final class Family extends Model
     }
 
     /**
+     * The date of birth, or null when it is missing or unreadable.
+     */
+    public function birthDate(): ?CarbonImmutable
+    {
+        if (! $this->dob) {
+            return null;
+        }
+
+        try {
+            return CarbonImmutable::parse($this->dob)->startOfDay();
+        } catch (InvalidFormatException) {
+            return null;
+        }
+    }
+
+    /**
+     * Age in whole years on the given day (defaults to today), or null when unknown.
+     */
+    public function age(?CarbonInterface $on = null): ?int
+    {
+        $birthDate = $this->birthDate();
+        $on = CarbonImmutable::instance($on ?? today())->startOfDay();
+
+        if (! $birthDate instanceof CarbonImmutable || $birthDate->greaterThan($on)) {
+            return null;
+        }
+
+        return (int) $birthDate->diffInYears($on);
+    }
+
+    /**
+     * The next birthday on or after the given day (defaults to today).
+     * Members born on 29 February celebrate on 28 February in non-leap years.
+     */
+    public function nextBirthday(?CarbonInterface $from = null): ?CarbonImmutable
+    {
+        $birthDate = $this->birthDate();
+        $from = CarbonImmutable::instance($from ?? today())->startOfDay();
+
+        if (! $birthDate instanceof CarbonImmutable || $birthDate->greaterThan($from)) {
+            return null;
+        }
+
+        $birthday = $this->birthdayInYear($birthDate, $from->year);
+
+        return $birthday->lessThan($from) ? $this->birthdayInYear($birthDate, $from->year + 1) : $birthday;
+    }
+
+    /**
      * Members sharing at least one known parent, including half-siblings.
      *
      * @return Collection<int, Family>
@@ -131,5 +183,12 @@ final class Family extends Model
             get: fn (?string $value): mixed => $value === null || $value === '' || $value === '0' ? [] : array_map('intval', json_decode($value)),
 
         );
+    }
+
+    private function birthdayInYear(CarbonImmutable $birthDate, int $year): CarbonImmutable
+    {
+        $day = min($birthDate->day, CarbonImmutable::create($year, $birthDate->month)->daysInMonth);
+
+        return CarbonImmutable::create($year, $birthDate->month, $day);
     }
 }
