@@ -79,6 +79,23 @@ it('centres the tree on the signed in member', function (): void {
         ->assertViewHas('mainId', $member->id);
 });
 
+it('returns search results sorted by name', function (): void {
+    Family::factory()->create(['first_name' => 'Zara', 'middle_name' => null, 'last_name' => 'Sharma']);
+    Family::factory()->create(['first_name' => 'Anil', 'middle_name' => 'Kumar', 'last_name' => 'Sharma']);
+    Family::factory()->create(['first_name' => 'Anil', 'middle_name' => 'Bahadur', 'last_name' => 'Sharma']);
+    Family::factory()->create(['first_name' => 'Maya', 'middle_name' => null, 'last_name' => 'Sharma']);
+
+    $this->actingAs(User::factory()->create(['role' => 'user']))
+        ->postJson(route('page.search.familyData'), ['q' => 'Sharma'])
+        ->assertSuccessful()
+        ->assertJsonPath('data.*.name', [
+            'Anil Bahadur Sharma',
+            'Anil Kumar Sharma',
+            'Maya  Sharma',
+            'Zara  Sharma',
+        ]);
+});
+
 it('lists each member\'s children in the tree data', function (): void {
     $father = Family::factory()->create(['gender' => 'M']);
     $mother = Family::factory()->create(['gender' => 'F']);

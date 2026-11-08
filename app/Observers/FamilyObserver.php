@@ -39,6 +39,7 @@ final class FamilyObserver
     public function deleted(Family $family): void
     {
         $this->deleteUser((string) $family->email);
+        $this->detachFromRelatives($family);
         $this->deleteCache();
     }
 
@@ -98,6 +99,28 @@ final class FamilyObserver
                 DB::table('families')->where('id', $spouse->id)->update(['spouse' => json_encode($spouseData)]);
             }
         }
+    }
+
+    /**
+     * Remove every reference other members hold to a deleted member.
+     */
+    private function detachFromRelatives(Family $family): void
+    {
+        $deletedId = (int) $family->id;
+
+        Family::query()->where('father_id', $deletedId)->update(['father_id' => null]);
+        Family::query()->where('mother_id', $deletedId)->update(['mother_id' => null]);
+
+        Family::query()
+            ->get(['id', 'spouse'])
+            ->filter(fn (Family $relative): bool => in_array($deletedId, (array) $relative->spouse, true))
+            ->each(function (Family $relative) use ($deletedId): void {
+                $remainingSpouseIds = array_values(array_diff((array) $relative->spouse, [$deletedId]));
+
+                DB::table('families')->where('id', $relative->id)->update([
+                    'spouse' => json_encode($remainingSpouseIds),
+                ]);
+            });
     }
 
     private function deleteCache(): void

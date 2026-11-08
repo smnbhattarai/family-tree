@@ -91,7 +91,10 @@ final class PageController
             ->orWhere('phone', 'LIKE', "%$q%")
             ->orWhere('address', 'LIKE', "%$q%")
             ->orWhere('dob', 'LIKE', "%$q%")
-            ->inRandomOrder()
+            ->orderBy('first_name')
+            ->orderBy('middle_name')
+            ->orderBy('last_name')
+            ->orderBy('id')
             ->get();
 
         $results = [];
