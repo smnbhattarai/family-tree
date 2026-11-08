@@ -119,6 +119,10 @@
             function updateTreeWithNewMainPerson(person_id, animation_initial = true) {
                 chart.updateMainId(person_id)
                 chart.updateTree({initial: animation_initial})
+
+                const url = new URL(window.location.href)
+                url.searchParams.set('focus', person_id)
+                window.history.replaceState(null, '', url)
             }
         });
 

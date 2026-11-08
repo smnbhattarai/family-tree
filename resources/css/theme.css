@@ -964,3 +964,65 @@ mark {
 .ft-chart-search .ft-chart-results > div:hover {
     background: var(--ft-green-100);
 }
+
+/* ---------- Family stats ---------- */
+.ft-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 1rem;
+}
+
+.ft-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--ft-radius);
+    background: var(--ft-paper);
+    box-shadow: var(--ft-shadow-sm);
+}
+
+.ft-stat-icon {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    background: var(--ft-green-100);
+    color: var(--ft-green-700);
+}
+
+.ft-stat-icon.is-accent {
+    background: rgba(200, 105, 60, 0.12);
+    color: var(--ft-terracotta);
+}
+
+.ft-stat-value {
+    font-family: var(--ft-font-heading);
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--ft-green-900);
+}
+
+.ft-stat-male {
+    color: var(--ft-male);
+}
+
+.ft-stat-female {
+    color: var(--ft-female);
+}
+
+.ft-stat-divider {
+    margin: 0 0.3rem;
+    color: var(--ft-muted);
+    font-weight: 400;
+}
+
+.ft-stat-label {
+    font-size: 0.85rem;
+    color: var(--ft-muted);
+}

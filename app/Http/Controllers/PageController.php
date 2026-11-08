@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FamilyRequest;
+use App\Http\Requests\FamilyTreeRequest;
 use App\Http\Requests\RelationshipRequest;
 use App\Models\Family;
 use App\Services\BirthdayCalendar;
+use App\Services\FamilyStats;
 use App\Services\RelationshipFinder;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -21,10 +23,11 @@ use Intervention\Image\Laravel\Facades\Image;
 
 final class PageController
 {
-    public function home(BirthdayCalendar $calendar): Factory|View
+    public function home(BirthdayCalendar $calendar, FamilyStats $stats): Factory|View
     {
         return view('home', [
             'birthdays' => auth()->check() ? $calendar->upcoming(30)->take(6) : collect(),
+            'stats' => auth()->check() ? $stats->summary() : null,
         ]);
     }
 
@@ -35,7 +38,7 @@ final class PageController
         ]);
     }
 
-    public function family(): View
+    public function family(FamilyTreeRequest $request): View
     {
         $families = Cache::remember('family.all', 24 * 60 * 60, fn () => Family::with('father', 'mother')->get());
 
@@ -43,7 +46,9 @@ final class PageController
             return view('page.family', ['data' => '[]', 'mainId' => null]);
         }
 
-        $mainPerson = $families->firstWhere('email', auth()->user()->email) ?? $families->random();
+        $mainPerson = ($request->filled('focus') ? $families->firstWhere('id', $request->integer('focus')) : null)
+            ?? $families->firstWhere('email', auth()->user()->email)
+            ?? $families->random();
         $mainId = (int) $mainPerson->id;
 
         $childrenIdsByParent = [];

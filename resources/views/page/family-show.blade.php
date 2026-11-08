@@ -24,6 +24,7 @@
 
                     <div class="d-flex justify-content-center flex-wrap gap-2 mt-4">
                         <a class="btn btn-info btn-sm" href="{{ route('page.search.family') }}"><i class="bi bi-arrow-left"></i> {{ __('Back') }}</a>
+                        <a class="btn btn-outline-success btn-sm" href="{{ route('page.family', ['focus' => $family->id]) }}"><i class="bi bi-diagram-3"></i> {{ __('View in tree') }}</a>
                         <a class="btn btn-outline-success btn-sm" href="{{ route('page.relationship', ['to' => $family->id]) }}"><i class="bi bi-diagram-2"></i> {{ __('How are we related?') }}</a>
                         @if(auth()->user()->isAdmin())
                             <a class="btn btn-primary btn-sm" href="{{ route('admin.family.edit', $family) }}"><i class="bi bi-pencil"></i> {{ __('Edit') }}</a>

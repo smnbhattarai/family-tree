@@ -69,6 +69,35 @@
     </section>
 
     @auth
+        @if($stats['total'] > 0)
+            <section class="ft-stats mt-5" aria-label="{{ __('Family at a glance') }}">
+                <div class="ft-stat">
+                    <span class="ft-stat-icon"><i class="bi bi-people"></i></span>
+                    <span class="ft-stat-value">{{ number_format($stats['total']) }}</span>
+                    <span class="ft-stat-label">{{ trans_choice('Member|Members', $stats['total']) }}</span>
+                </div>
+                <div class="ft-stat">
+                    <span class="ft-stat-icon is-accent"><i class="bi bi-diagram-3"></i></span>
+                    <span class="ft-stat-value">{{ $stats['generations'] }}</span>
+                    <span class="ft-stat-label">{{ trans_choice('Generation|Generations', $stats['generations']) }}</span>
+                </div>
+                <div class="ft-stat">
+                    <span class="ft-stat-icon"><i class="bi bi-gender-ambiguous"></i></span>
+                    <span class="ft-stat-value">
+                        <span class="ft-stat-male">{{ $stats['male'] }}</span><span class="ft-stat-divider">/</span><span class="ft-stat-female">{{ $stats['female'] }}</span>
+                    </span>
+                    <span class="ft-stat-label">{{ __('Male / Female') }}</span>
+                </div>
+                @if($stats['common_surname'] !== null)
+                    <div class="ft-stat">
+                        <span class="ft-stat-icon is-accent"><i class="bi bi-person-badge"></i></span>
+                        <span class="ft-stat-value text-truncate">{{ $stats['common_surname'] }}</span>
+                        <span class="ft-stat-label">{{ __('Most common surname (:count)', ['count' => $stats['common_surname_count']]) }}</span>
+                    </div>
+                @endif
+            </section>
+        @endif
+
         <section class="card ft-birthdays-card mt-5">
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
